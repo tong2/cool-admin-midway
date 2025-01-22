@@ -7,7 +7,7 @@ import { CoolCacheStore } from '@cool-midway/core';
 
 export default {
   // use for cookie sign key, should change to your own and keep security
-  keys: 'cool-admin-keys-xxxxxx',
+  keys: '56b62a30d81011efbcbfeb9eca7c8cbf',
   koa: {
     port: 8001,
   },

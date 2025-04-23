@@ -1,7 +1,7 @@
 import { BaseEntity } from '@cool-midway/core';
 import { Column, Entity, PrimaryGeneratedColumn, Index } from 'typeorm';
 /**
- * 财务模块-订单信息
+ * 抖音订单
  */
 @Entity('finance_orders')
 export class FinanceOrdersEntity extends BaseEntity {

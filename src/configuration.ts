@@ -12,7 +12,7 @@ import * as cool from '@cool-midway/core';
 import { ILogger } from '@midwayjs/logger';
 import * as upload from '@midwayjs/upload';
 import { IMidwayApplication } from '@midwayjs/core';
-// import * as swagger from '@midwayjs/swagger';
+import * as swagger from '@midwayjs/swagger';
 // import * as rpc from '@cool-midway/rpc';
 // import * as task from '@cool-midway/task';
 
@@ -41,7 +41,7 @@ import { IMidwayApplication } from '@midwayjs/core';
     // 任务与队列
     // task,
     // swagger 文档  http://www.midwayjs.org/docs/extensions/swagger
-    // swagger,
+    swagger,
     {
       component: info,
       enabledEnvironment: ['local'],

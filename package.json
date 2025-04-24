@@ -26,6 +26,7 @@
     "cache-manager-ioredis-yet": "^2.0.4",
     "decompress": "^4.2.1",
     "download": "^8.0.0",
+    "exceljs": "^4.4.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",

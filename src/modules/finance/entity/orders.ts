@@ -64,14 +64,9 @@ export class FinanceOrdersEntity extends BaseEntity {
   })
   total_discount_amount: number;
 
-  @Column({
-    comment: '平台优惠', nullable: true,
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    default: 0,
-  })
-  platform_discount: number;
+
+  @Column({ comment: '平台优惠', nullable: true, length: 150 })
+  platform_discount: string;
 
   @Column({
     comment: '商家优惠', nullable: true,
@@ -130,10 +125,10 @@ export class FinanceOrdersEntity extends BaseEntity {
   })
   transaction_fee: number;
 
-  @Column({ comment: '收件人', nullable: true, length: 100 })
+  @Column({ comment: '收件人', nullable: true, length: 600 })
   recipient_name: string;
 
-  @Column({ comment: '收件人手机号', nullable: true, length: 20 })
+  @Column({ comment: '收件人手机号', nullable: true, length: 600 })
   recipient_phone_number: string;
 
   @Column({ comment: '省', nullable: true, length: 50 })
@@ -148,7 +143,7 @@ export class FinanceOrdersEntity extends BaseEntity {
   @Column({ comment: '街道', nullable: true, length: 100 })
   street: string;
 
-  @Column({ comment: '详细地址', nullable: true, length: 255 })
+  @Column({ comment: '详细地址', nullable: true, length: 855 })
   detailed_address: string;
 
   @Column({ comment: '是否修改过地址', nullable: true, length: 50 })

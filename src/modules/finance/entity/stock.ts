@@ -19,7 +19,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   weight: number;
 
@@ -29,7 +29,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   purchase_price: number;
 
@@ -39,7 +39,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   payment_price: number;
 
@@ -64,7 +64,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   fee1: number;
 
@@ -74,7 +74,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   fee2: number;
 
@@ -84,7 +84,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   fee3: number;
 
@@ -94,7 +94,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   fee4: number;
 
@@ -104,7 +104,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   fee5: number;
 
@@ -114,7 +114,7 @@ export class FinanceStockEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   rebate: number;
 

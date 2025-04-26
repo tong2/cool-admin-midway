@@ -31,7 +31,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   payment_amount: number;
 
@@ -41,7 +41,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 5,
     scale: 2,
-    default: 0,
+    
   })
   commission_rate: number;
 
@@ -51,7 +51,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   estimated_commission: number;
 
@@ -61,7 +61,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   settled_amount: number;
 
@@ -71,7 +71,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   actual_commission: number;
 
@@ -102,7 +102,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   deposit_amount: number;
 
@@ -124,7 +124,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 5,
     scale: 2,
-    default: 0,
+    
   })
   freeze_ratio: number;
 
@@ -140,7 +140,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 5,
     scale: 2,
-    default: 0,
+    
   })
   base_commission_rate: number;
 
@@ -150,7 +150,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 5,
     scale: 2,
-    default: 0,
+    
   })
   increased_commission_rate: number;
 
@@ -160,7 +160,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   estimated_bonus_commission: number;
 
@@ -170,7 +170,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   settled_bonus_commission: number;
 
@@ -183,7 +183,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   payment_subsidy: number;
 
@@ -193,7 +193,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   platform_subsidy: number;
 
@@ -203,7 +203,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   talent_subsidy: number;
 
@@ -213,7 +213,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   shipping_fee: number;
 
@@ -223,7 +223,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   tax_fee: number;
 
@@ -233,7 +233,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   shipping_subsidy: number;
 
@@ -249,7 +249,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 5,
     scale: 2,
-    default: 0,
+    
   })
   promotion_rate: number;
 
@@ -259,7 +259,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   promotion_tech_service_fee: number;
 
@@ -269,7 +269,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   estimated_promotion_fee: number;
 
@@ -279,7 +279,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   settled_promotion_fee: number;
 

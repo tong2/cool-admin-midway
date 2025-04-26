@@ -8,4 +8,6 @@ import { FinanceErpOrdersEntity } from '../../entity/erpOrders';
   api: ['add', 'delete', 'update', 'info', 'list', 'page'],
   entity: FinanceErpOrdersEntity,
 })
-export class FinanceErpOrdersEntityController extends BaseController {}
+export class FinanceErpOrdersEntityController extends BaseController {
+  
+}

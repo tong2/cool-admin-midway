@@ -34,7 +34,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   payment_amount: number;
 
@@ -44,7 +44,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 5,
     scale: 2,
-    default: 0,
+    
   })
   service_fee_rate: number;
 
@@ -54,7 +54,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   estimated_service_fee_income: number;
 
@@ -64,7 +64,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   settled_amount: number;
 
@@ -74,7 +74,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   actual_service_fee_income: number;
 
@@ -96,7 +96,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   deposit_amount: number;
 
@@ -121,7 +121,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   payment_subsidy: number;
 
@@ -131,7 +131,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   platform_subsidy: number;
 
@@ -141,7 +141,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   talent_subsidy: number;
 
@@ -151,7 +151,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   shipping_fee: number;
 
@@ -161,7 +161,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   tax_fee: number;
 
@@ -171,7 +171,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   shipping_subsidy: number;
 

@@ -2,97 +2,167 @@ import { FinanceStockEntity } from '../entity/stock';
 import { Provide } from '@midwayjs/decorator';
 import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindOptionsWhere, Like } from 'typeorm';
 
 /**
- * 订单示例
+ * 库存表服务
  */
 @Provide()
 export class FinanceStockService extends BaseService {
   @InjectEntityModel(FinanceStockEntity)
-  FinanceStockEntity: Repository<FinanceStockEntity>;
+  financeStockModel: Repository<FinanceStockEntity>;
 
   /**
- * 执行sql分页
- */
-  async sqlPage(query) {
-    // 示例插入数据，确保与 FinanceStockEntity 字段匹配
-    // await this.FinanceStockEntity.save({
-    //   mainOrderNumber: 'MO123456789',
-    //   subOrderNumber: 'SO987654321',
-    //   selectedGoods: '示例商品',
-    //   productSpecification: '规格A',
-    //   productQuantity: 2,
-    //   productId: 'PID001',
-    //   merchantCode: 'MC001',
-    //   productPrice: 99.99,
-    //   orderPayableAmount: 199.98,
-    //   shippingFee: 10.0,
-    //   totalDiscountAmount: 20.0,
-    //   platformDiscount: 5.0,
-    //   merchantDiscount: 10.0,
-    //   influencerDiscount: 5.0,
-    //   priceReductionDiscount: 5.0,
-    //   platformActualDiscount: 3.0,
-    //   merchantActualDiscount: 1.0,
-    //   influencerActualDiscount: 1.0,
-    //   paymentMethod: '在线支付',
-    //   transactionFee: 2.0,
-    //   recipientName: '张三',
-    //   recipientPhoneNumber: '12345678901',
-    //   province: '北京市',
-    //   city: '北京市',
-    //   district: '海淀区',
-    //   street: '中关村',
-    //   detailedAddress: '中关村大街27号',
-    //   isAddressModified: false,
-    //   buyerMessage: '请尽快发货',
-    //   orderSubmissionTime: new Date(),
-    //   flagColor: '红色',
-    //   merchantRemark: '无备注',
-    //   orderCompletionTime: new Date(),
-    //   paymentCompletionTime: new Date(),
-    //   appChannel: 'AppStore',
-    //   trafficSource: '抖音广告',
-    //   orderStatus: '已完成',
-    //   promisedDeliveryTime: new Date(),
-    //   orderType: '普通订单',
-    //   lubanPageId: 'LB123',
-    //   influencerId: 'IN001',
-    //   influencerNickname: '达人张三',
-    //   storeId: 'STORE001',
-    //   afterSalesStatus: '无售后',
-    //   cancellationReason: '无',
-    //   scheduledDeliveryTime: new Date(),
-    //   warehouseId: 'WH001',
-    //   warehouseName: '北京仓库',
-    //   isSafePurchase: true,
-    //   adChannel: '广告渠道A',
-    //   trafficType: '流量类型A',
-    //   trafficFormat: '图文广告',
-    //   trafficChannel: '渠道B',
-    //   deliveryEntity: '发货主体A',
-    //   deliveryEntityDetails: '发货主体明细A',
-    //   deliveryTime: new Date(),
-    //   vehicleType: '快递',
-    //   scheduledDeliveryArrivalTime: new Date(),
-    //   suggestedDeliveryStartTime: new Date(),
-    //   suggestedDeliveryEndTime: new Date(),
-    // });
+   * Conditional query with pagination, supporting fuzzy matching
+   * @param query - Query conditions
+   */
+  async list(query: any) {
+    const {
+      page = 1,
+      size = 10,
+      product_code,
+      brand_owner,
+      supplier,
+      ...otherParams
+    } = query;
 
-    // 分页查询的 SQL 语句更新为查询 finance_orders 表
-    return this.sqlRenderPage(
-      'select * from finance_orders ORDER BY id ASC',
-      query,
-      false
-    );
+    const where: FindOptionsWhere<FinanceStockEntity> = {};
+
+    // Fuzzy matching for string fields
+    if (product_code) {
+      where.product_code = Like(`%${product_code}%`);
+    }
+    if (brand_owner) {
+      where.brand_owner = Like(`%${brand_owner}%`);
+    }
+    if (supplier) {
+      where.supplier = Like(`%${supplier}%`);
+    }
+
+    // Other dynamic conditions (exact match)
+    Object.keys(otherParams).forEach(key => {
+      if (otherParams[key] && FinanceStockEntity.prototype.hasOwnProperty(key)) {
+        where[key] = otherParams[key];
+      }
+    });
+
+    const [list, total] = await this.financeStockModel.findAndCount({
+      where,
+      order: { id: 'DESC' },
+      skip: (page - 1) * size,
+      take: size,
+    });
+
+    return { list, total };
   }
 
   /**
-   * 执行entity分页
+   * Export data with conditions using TypeORM
+   * @param query - Query conditions
    */
-  async entityPage(query) {
-    const find = this.FinanceStockEntity.createQueryBuilder();
-    return this.entityRenderPage(find, query);
+  async export(query: any) {
+    const where: FindOptionsWhere<FinanceStockEntity> = {};
+
+    // Apply same conditions as list method
+    const {
+      product_code,
+      brand_owner,
+      supplier,
+      ...otherParams
+    } = query;
+
+    if (product_code) {
+      where.product_code = Like(`%${product_code}%`);
+    }
+    if (brand_owner) {
+      where.brand_owner = Like(`%${brand_owner}%`);
+    }
+    if (supplier) {
+      where.supplier = Like(`%${supplier}%`);
+    }
+
+    Object.keys(otherParams).forEach(key => {
+      if (otherParams[key] && FinanceStockEntity.prototype.hasOwnProperty(key)) {
+        where[key] = otherParams[key];
+      }
+    });
+
+    const data = await this.financeStockModel.find({ where });
+
+    // Define export headers with Chinese labels
+    const headers = [
+      { key: 'product_code', label: '商品编码' },
+      { key: 'weight', label: '重量' },
+      { key: 'purchase_price', label: '采购价' },
+      { key: 'payment_price', label: '打款价' },
+      { key: 'box_specification', label: '箱规' },
+      { key: 'product_quantity', label: '商品数量' },
+      { key: 'brand_owner', label: '品牌方' },
+      { key: 'supplier', label: '供货方' },
+      { key: 'is_rebate_calculated', label: '是否计算返利' },
+      { key: 'fee1', label: '费用1' },
+      { key: 'fee2', label: '费用2' },
+      { key: 'fee3', label: '费用3' },
+      { key: 'fee4', label: '费用4' },
+      { key: 'fee5', label: '费用5' },
+      { key: 'rebate', label: '返利' },
+    ];
+
+    // Format data for export
+    const exportData = data.map(item => {
+      const row: { [key: string]: any } = {};
+      headers.forEach(header => {
+        row[header.key] = item[header.key] ?? '';
+      });
+      return row;
+    });
+
+    return { headers, data: exportData };
+  }
+
+  /**
+   * Import stock records from Excel data
+   * @param data - Parsed Excel data
+   */
+  async import(data: any[]) {
+    const safeTrim = (value: any) => {
+      if (value === '-') {
+        return null; // Handle "-" as null
+      }
+      if (typeof value === 'string') {
+        // Remove problematic characters
+        return value.trim().replace(/[\0\b\n\r\t\\'"\x1a]/g, '');
+      }
+      return value;
+    };
+
+    const entities = data.map(item => {
+      const entity = new FinanceStockEntity();
+
+      // String fields
+      entity.product_code = safeTrim(item['商品编码']) ?? null;
+      entity.box_specification = safeTrim(item['箱规']) ?? null;
+      entity.brand_owner = safeTrim(item['品牌方']) ?? null;
+      entity.supplier = safeTrim(item['供货方']) ?? null;
+      entity.is_rebate_calculated = safeTrim(item['是否计算返利']) ?? 'false';
+
+      // Numeric fields
+      entity.weight = parseFloat(item['重量']) || null;
+      entity.purchase_price = parseFloat(item['采购价']) || null;
+      entity.payment_price = parseFloat(item['打款价']) || null;
+      entity.product_quantity = parseInt(item['商品数量'], 10) || null;
+      entity.fee1 = parseFloat(item['费用1']) || null;
+      entity.fee2 = parseFloat(item['费用2']) || null;
+      entity.fee3 = parseFloat(item['费用3']) || null;
+      entity.fee4 = parseFloat(item['费用4']) || null;
+      entity.fee5 = parseFloat(item['费用5']) || null;
+      entity.rebate = parseFloat(item['返利']) || null;
+
+      return entity;
+    });
+
+    // Batch save
+    await this.financeStockModel.save(entities);
+    return { success: true, count: entities.length };
   }
 }

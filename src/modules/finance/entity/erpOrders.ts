@@ -113,7 +113,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   order_payment_amount: number;
 
@@ -123,7 +123,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   postage: number;
 
@@ -133,7 +133,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   other_fees: number;
 
@@ -143,7 +143,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   order_total_discount: number;
 
@@ -153,7 +153,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   receivable_amount: number;
 
@@ -163,7 +163,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   payment_on_delivery_amount: number;
 
@@ -173,7 +173,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   cash_on_delivery_amount: number;
 
@@ -183,7 +183,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   order_estimated_cost: number;
 
@@ -193,7 +193,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   postage_cost: number;
 
@@ -203,7 +203,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   estimated_weight: number;
 
@@ -264,7 +264,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   list_price: number;
 
@@ -274,7 +274,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   product_total_discount: number;
 
@@ -284,7 +284,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   transaction_price: number;
 
@@ -294,7 +294,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   apportioned_price: number;
 
@@ -304,7 +304,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   discount: number;
 
@@ -317,7 +317,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   apportioned_total_price: number;
 
@@ -327,7 +327,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   pre_refund_payment_amount: number;
 
@@ -337,7 +337,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   apportioned_postage: number;
 
@@ -347,7 +347,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   single_item_payment_amount: number;
 
@@ -357,7 +357,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   commission: number;
 
@@ -370,7 +370,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+    
   })
   estimated_weight_per_item: number;
 

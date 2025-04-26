@@ -51,7 +51,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   shipping_fee: number;
 
@@ -60,7 +60,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   total_discount_amount: number;
 
@@ -73,7 +73,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   merchant_discount: number;
 
@@ -82,7 +82,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   influencer_discount: number;
 
@@ -91,7 +91,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   merchant_price_adjustment: number;
 
@@ -100,7 +100,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   payment_discount: number;
 
@@ -109,7 +109,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   red_envelope_deduction: number;
 
@@ -121,7 +121,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   transaction_fee: number;
 
@@ -238,7 +238,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   price_reduction_discount: number;
 
@@ -247,7 +247,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   platform_actual_discount: number;
 
@@ -256,7 +256,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   merchant_actual_discount: number;
 
@@ -265,7 +265,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     type: 'decimal',
     precision: 10,
     scale: 2,
-    default: 0,
+
   })
   influencer_actual_discount: number;
 

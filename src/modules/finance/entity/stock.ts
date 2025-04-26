@@ -55,67 +55,25 @@ export class FinanceStockEntity extends BaseEntity {
   @Column({ comment: '供货方', nullable: true, length: 100 })
   supplier: string;
 
-  @Column({ comment: '是否计算返利', nullable: true, length: 50, default: 'false' })
+  @Column({ comment: '是否计算返利', nullable: true, length: 50 })
   is_rebate_calculated: string;
 
-  @Column({
-    comment: '费用1（比例或者总数）',
-    nullable: true,
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    
-  })
-  fee1: number;
+  @Column({ comment: '费用1（比例或者总数）', nullable: true, length: 50 })
+  fee1: string;
 
-  @Column({
-    comment: '费用2',
-    nullable: true,
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    
-  })
-  fee2: number;
+  @Column({ comment: '费用2', nullable: true, length: 50 })
+  fee2: string;
 
-  @Column({
-    comment: '费用3',
-    nullable: true,
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    
-  })
-  fee3: number;
+  @Column({ comment: '费用3', nullable: true, length: 50 })
+  fee3: string;
 
-  @Column({
-    comment: '费用4',
-    nullable: true,
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    
-  })
-  fee4: number;
+  @Column({ comment: '费用4', nullable: true, length: 50 })
+  fee4: string;
 
-  @Column({
-    comment: '费用5',
-    nullable: true,
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    
-  })
-  fee5: number;
+  @Column({ comment: '费用5', nullable: true, length: 50 })
+  fee5: string;
 
-  @Column({
-    comment: '返利',
-    nullable: true,
-    type: 'decimal',
-    precision: 10,
-    scale: 2,
-    
-  })
-  rebate: number;
+  @Column({ comment: '返利', nullable: true, length: 50 })
+  rebate: string;
 
 }

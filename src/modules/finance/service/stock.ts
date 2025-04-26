@@ -144,19 +144,20 @@ export class FinanceStockService extends BaseService {
       entity.box_specification = safeTrim(item['箱规']) ?? null;
       entity.brand_owner = safeTrim(item['品牌方']) ?? null;
       entity.supplier = safeTrim(item['供货方']) ?? null;
-      entity.is_rebate_calculated = safeTrim(item['是否计算返利']) ?? 'false';
+      entity.is_rebate_calculated = safeTrim(item['是否计算返利']) ?? null;
+      entity.fee1 = safeTrim(item['费用1（比例或者总数）']) ||safeTrim(item['费用1']) || null;
+      entity.fee2 = safeTrim(item['费用2']) || null;
+      entity.fee3 = safeTrim(item['费用3']) || null;
+      entity.fee4 = safeTrim(item['费用4']) || null;
+      entity.fee5 = safeTrim(item['费用5']) || null;
+      entity.rebate = safeTrim(item['返利']) || null;
 
       // Numeric fields
       entity.weight = parseFloat(item['重量']) || null;
       entity.purchase_price = parseFloat(item['采购价']) || null;
       entity.payment_price = parseFloat(item['打款价']) || null;
       entity.product_quantity = parseInt(item['商品数量'], 10) || null;
-      entity.fee1 = parseFloat(item['费用1']) || null;
-      entity.fee2 = parseFloat(item['费用2']) || null;
-      entity.fee3 = parseFloat(item['费用3']) || null;
-      entity.fee4 = parseFloat(item['费用4']) || null;
-      entity.fee5 = parseFloat(item['费用5']) || null;
-      entity.rebate = parseFloat(item['返利']) || null;
+      
 
       return entity;
     });

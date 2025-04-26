@@ -103,9 +103,9 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'order_id', label: '订单ID' },
+      { key: 'order_id', label: '订单id' },
       { key: 'product_name', label: '商品名称' },
-      { key: 'product_id', label: '商品ID' },
+      { key: 'product_id', label: '商品id' },
       { key: 'order_status', label: '订单状态' },
       { key: 'unsettled_reason', label: '超时未结算原因' },
       { key: 'issuing_agency', label: '出单机构' },
@@ -119,10 +119,10 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
       { key: 'settlement_time', label: '结算时间' },
       { key: 'final_payment_time', label: '尾款支付时间' },
       { key: 'deposit_amount', label: '定金金额' },
-      { key: 'shop_id', label: '店铺ID' },
+      { key: 'shop_id', label: '店铺id' },
       { key: 'shop_name', label: '店铺名称' },
       { key: 'product_quantity', label: '商品数量' },
-      { key: 'group_leader_activity_id', label: '团长活动ID' },
+      { key: 'group_leader_activity_id', label: '团长活动id' },
       { key: 'order_source', label: '订单来源:直播' },
       { key: 'payment_subsidy', label: '支付补贴' },
       { key: 'platform_subsidy', label: '平台补贴' },
@@ -168,15 +168,15 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
       const entity = new FinanceGroupLeaderServiceFeeEntity();
 
       // String fields
-      entity.order_id = safeTrim(item['订单ID']) ?? null;
+      entity.order_id = safeTrim(item['订单id']) ?? null;
       entity.product_name = safeTrim(item['商品名称']) ?? null;
-      entity.product_id = safeTrim(item['商品ID']) ?? null;
+      entity.product_id = safeTrim(item['商品id']) ?? null;
       entity.order_status = safeTrim(item['订单状态']) ?? null;
       entity.unsettled_reason = safeTrim(item['超时未结算原因']) ?? null;
       entity.issuing_agency = safeTrim(item['出单机构']) ?? null;
-      entity.shop_id = safeTrim(item['店铺ID']) ?? null;
+      entity.shop_id = safeTrim(item['店铺id']) ?? null;
       entity.shop_name = safeTrim(item['店铺名称']) ?? null;
-      entity.group_leader_activity_id = safeTrim(item['团长活动ID']) ?? null;
+      entity.group_leader_activity_id = safeTrim(item['团长活动id']) ?? null;
       entity.order_source = safeTrim(item['订单来源:直播']) ?? null;
       entity.plan_type = safeTrim(item['计划类型']) ?? null;
       entity.product_source = safeTrim(item['商品来源']) ?? null;

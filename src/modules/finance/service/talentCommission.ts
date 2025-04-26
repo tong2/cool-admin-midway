@@ -103,8 +103,8 @@ export class FinanceTalentCommissionService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'order_id', label: '订单ID' },
-      { key: 'product_id', label: '商品ID' },
+      { key: 'order_id', label: '订单id' },
+      { key: 'product_id', label: '商品id' },
       { key: 'product_name', label: '商品名称' },
       { key: 'author_account', label: '作者账号' },
       { key: 'douyin_huoshan_id', label: '抖音/火山号' },
@@ -121,7 +121,7 @@ export class FinanceTalentCommissionService extends BaseService {
       { key: 'product_source', label: '商品来源' },
       { key: 'final_payment_time', label: '尾款支付时间' },
       { key: 'deposit_amount', label: '定金金额' },
-      { key: 'shop_id', label: '店铺ID' },
+      { key: 'shop_id', label: '店铺id' },
       { key: 'shop_name', label: '店铺名称' },
       { key: 'product_quantity', label: '商品数量' },
       { key: 'commission_invoice', label: '佣金发票' },
@@ -140,7 +140,7 @@ export class FinanceTalentCommissionService extends BaseService {
       { key: 'tax_fee', label: '税费' },
       { key: 'shipping_subsidy', label: '运费补贴' },
       { key: 'distribution_source', label: '分销来源' },
-      { key: 'marketing_activity_id', label: '营销活动ID' },
+      { key: 'marketing_activity_id', label: '营销活动id' },
       { key: 'promotion_rate', label: '推广费率' },
       { key: 'promotion_tech_service_fee', label: '推广技术服务费' },
       { key: 'estimated_promotion_fee', label: '预估推广费支出' },
@@ -184,21 +184,21 @@ export class FinanceTalentCommissionService extends BaseService {
       const entity = new FinanceTalentCommissionEntity();
 
       // String fields
-      entity.order_id = safeTrim(item['订单ID']) ?? null;
-      entity.product_id = safeTrim(item['商品ID']) ?? null;
+      entity.order_id = safeTrim(item['订单id']) ?? null;
+      entity.product_id = safeTrim(item['商品id']) ?? null;
       entity.product_name = safeTrim(item['商品名称']) ?? null;
       entity.author_account = safeTrim(item['作者账号']) ?? null;
       entity.douyin_huoshan_id = safeTrim(item['抖音/火山号']) ?? null;
       entity.order_status = safeTrim(item['订单状态']) ?? null;
       entity.unsettled_reason = safeTrim(item['超时未结算原因']) ?? null;
       entity.product_source = safeTrim(item['商品来源']) ?? null;
-      entity.shop_id = safeTrim(item['店铺ID']) ?? null;
+      entity.shop_id = safeTrim(item['店铺id']) ?? null;
       entity.shop_name = safeTrim(item['店铺名称']) ?? null;
       entity.commission_invoice = safeTrim(item['佣金发票']) ?? null;
       entity.is_tiered_commission = safeTrim(item['是否阶梯佣金']) ?? null;
       entity.tiered_plan_id = safeTrim(item['阶梯计划ID']) ?? null;
       entity.distribution_source = safeTrim(item['分销来源']) ?? null;
-      entity.marketing_activity_id = safeTrim(item['营销活动ID']) ?? null;
+      entity.marketing_activity_id = safeTrim(item['营销活动id']) ?? null;
       entity.plan_type = safeTrim(item['计划类型']) ?? null;
       entity.order_source = safeTrim(item['订单来源']) ?? null;
       entity.traffic_segment_source = safeTrim(item['流量细分来源']) ?? null;

@@ -55,7 +55,6 @@ export class FinanceTalentCommissionService extends BaseService {
 
     const [list, total] = await this.financeTalentCommissionModel.findAndCount({
       where,
-      order: { payment_time: 'DESC' },
       skip: (page - 1) * size,
       take: size,
     });

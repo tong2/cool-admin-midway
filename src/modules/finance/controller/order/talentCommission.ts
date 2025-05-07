@@ -10,7 +10,7 @@ import { Validate } from '@midwayjs/validate';
 import * as ExcelJS from 'exceljs';
 import { existsSync } from 'fs';
 /**
- * 财务模块-订单信息
+ * 财务模块-达人佣金控制器
  */
 @CoolController({
   api: ['add', 'delete', 'update', 'info', 'list', 'page'],

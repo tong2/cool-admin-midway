@@ -55,7 +55,6 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
 
     const [list, total] = await this.financeGroupLeaderServiceFeeModel.findAndCount({
       where,
-      order: { payment_time: 'DESC' },
       skip: (page - 1) * size,
       take: size,
     });

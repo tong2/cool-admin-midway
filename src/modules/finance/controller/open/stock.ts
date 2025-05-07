@@ -19,145 +19,145 @@ import { existsSync } from 'fs';
   service: FinanceStockService,
 })
 export class OpenFinanceStockController extends BaseController {
-  @InjectEntityModel(FinanceStockEntity)
-  financeStockEntity: Repository<FinanceStockEntity>;
+  // @InjectEntityModel(FinanceStockEntity)
+  // financeStockEntity: Repository<FinanceStockEntity>;
 
-  @Inject()
-  ctx: Context; // 注入上下文对象
+  // @Inject()
+  // ctx: Context; // 注入上下文对象
 
-  @Inject()
-  financeStockService: FinanceStockService;
+  // @Inject()
+  // financeStockService: FinanceStockService;
 
-  /**
-   * Get paginated list of stock records
-   */
-  @Get('/stock-list')
-  @Validate()
-  async stockList(@Query() query: FinanceStockQueryDTO) {
-    const result = await this.financeStockService.list(query);
-    return {
-      code: 200,
-      message: 'Success',
-      data: result,
-    };
-  }
+  // /**
+  //  * Get paginated list of stock records
+  //  */
+  // @Get('/stock-list')
+  // @Validate()
+  // async stockList(@Query() query: FinanceStockQueryDTO) {
+  //   const result = await this.financeStockService.list(query);
+  //   return {
+  //     code: 200,
+  //     message: 'Success',
+  //     data: result,
+  //   };
+  // }
 
-  /**
-   * Export stock records to Excel
-   */
-  @Get('/export')
-  @Validate()
-  async export(@Query() query: FinanceStockQueryDTO) {
-    const { headers, data } = await this.financeStockService.export(query);
+  // /**
+  //  * Export stock records to Excel
+  //  */
+  // @Get('/export')
+  // @Validate()
+  // async export(@Query() query: FinanceStockQueryDTO) {
+  //   const { headers, data } = await this.financeStockService.export(query);
 
-    // Create Excel workbook
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Stock Records');
+  //   // Create Excel workbook
+  //   const workbook = new ExcelJS.Workbook();
+  //   const worksheet = workbook.addWorksheet('Stock Records');
 
-    // Add headers with Chinese labels
-    worksheet.columns = headers.map(header => ({
-      header: header.label, // Use Chinese label for display
-      key: header.key, // Use key for data mapping
-      width: 20,
-    }));
+  //   // Add headers with Chinese labels
+  //   worksheet.columns = headers.map(header => ({
+  //     header: header.label, // Use Chinese label for display
+  //     key: header.key, // Use key for data mapping
+  //     width: 20,
+  //   }));
 
-    // Add data
-    worksheet.addRows(data);
+  //   // Add data
+  //   worksheet.addRows(data);
 
-    // Set response headers
-    this.ctx.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    this.ctx.set('Content-Disposition', 'attachment; filename=stock-records.xlsx');
+  //   // Set response headers
+  //   this.ctx.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  //   this.ctx.set('Content-Disposition', 'attachment; filename=stock-records.xlsx');
 
-    // Write to buffer and return
-    const buffer = await workbook.xlsx.writeBuffer();
-    return buffer;
-  }
+  //   // Write to buffer and return
+  //   const buffer = await workbook.xlsx.writeBuffer();
+  //   return buffer;
+  // }
 
-  /**
-   * Import stock records from Excel
-   */
-  @Post('/import')
-  async importExcel(@Files() files) {
-    try {
-      // Check if file exists
-      if (!files || files.length === 0) {
-        console.log('No files uploaded');
-        return this.fail('未上传文件');
-      }
+  // /**
+  //  * Import stock records from Excel
+  //  */
+  // @Post('/import')
+  // async importExcel(@Files() files) {
+  //   try {
+  //     // Check if file exists
+  //     if (!files || files.length === 0) {
+  //       console.log('No files uploaded');
+  //       return this.fail('未上传文件');
+  //     }
 
-      // Get the first file
-      const file = files[0];
-      console.log('Uploaded File:', file);
+  //     // Get the first file
+  //     const file = files[0];
+  //     console.log('Uploaded File:', file);
 
-      // Check if file data exists
-      if (!file?.data) {
-        console.log('File data is missing');
-        return this.fail('上传的文件路径不存在');
-      }
+  //     // Check if file data exists
+  //     if (!file?.data) {
+  //       console.log('File data is missing');
+  //       return this.fail('上传的文件路径不存在');
+  //     }
 
-      // Check if file path is valid
-      console.log('File Path:', file.data);
-      if (!existsSync(file.data)) {
-        console.log('File does not exist at the path:', file.data);
-        return this.fail('上传的文件不存在');
-      }
+  //     // Check if file path is valid
+  //     console.log('File Path:', file.data);
+  //     if (!existsSync(file.data)) {
+  //       console.log('File does not exist at the path:', file.data);
+  //       return this.fail('上传的文件不存在');
+  //     }
 
-      // Read Excel file
-      console.log('Reading the Excel file from:', file.data);
-      const workbook = new ExcelJS.Workbook();
-      await workbook.xlsx.readFile(file.data);
-      const worksheet = workbook.getWorksheet(1);
+  //     // Read Excel file
+  //     console.log('Reading the Excel file from:', file.data);
+  //     const workbook = new ExcelJS.Workbook();
+  //     await workbook.xlsx.readFile(file.data);
+  //     const worksheet = workbook.getWorksheet(1);
 
-      if (!worksheet) {
-        console.log('No worksheet found in the Excel file');
-        return this.fail('Excel 文件没有找到工作表');
-      }
+  //     if (!worksheet) {
+  //       console.log('No worksheet found in the Excel file');
+  //       return this.fail('Excel 文件没有找到工作表');
+  //     }
 
-      // Parse worksheet data
-      console.log('Found worksheet:', worksheet.name);
-      const data: any[] = [];
-      const headers: string[] = [];
+  //     // Parse worksheet data
+  //     console.log('Found worksheet:', worksheet.name);
+  //     const data: any[] = [];
+  //     const headers: string[] = [];
 
-      worksheet.eachRow((row, rowNumber) => {
-        if (rowNumber === 1) {
-          // First row is headers
-          row.eachCell(cell => {
-            headers.push(cell.value ? String(cell.value).trim() : '');
-          });
-          console.log('Headers:', headers);
-        } else {
-          // Data rows
-          const rowData: any = {};
-          row.eachCell((cell, colNumber) => {
-            const header = headers[colNumber - 1];
-            if (header) {
-              rowData[header] = cell.value !== null && cell.value !== undefined ? cell.value : '';
-            }
-          });
-          if (Object.keys(rowData).length > 0) {
-            data.push(rowData);
-          }
-        }
-      });
+  //     worksheet.eachRow((row, rowNumber) => {
+  //       if (rowNumber === 1) {
+  //         // First row is headers
+  //         row.eachCell(cell => {
+  //           headers.push(cell.value ? String(cell.value).trim() : '');
+  //         });
+  //         console.log('Headers:', headers);
+  //       } else {
+  //         // Data rows
+  //         const rowData: any = {};
+  //         row.eachCell((cell, colNumber) => {
+  //           const header = headers[colNumber - 1];
+  //           if (header) {
+  //             rowData[header] = cell.value !== null && cell.value !== undefined ? cell.value : '';
+  //           }
+  //         });
+  //         if (Object.keys(rowData).length > 0) {
+  //           data.push(rowData);
+  //         }
+  //       }
+  //     });
 
-      // Check if valid data exists
-      if (data.length === 0) {
-        console.log('No valid data found in the Excel file');
-        return this.fail('Excel 文件中没有有效数据');
-      }
+  //     // Check if valid data exists
+  //     if (data.length === 0) {
+  //       console.log('No valid data found in the Excel file');
+  //       return this.fail('Excel 文件中没有有效数据');
+  //     }
 
-      // maximizing throughput
-      console.log('Processing data for import...');
-      const result = await this.financeStockService.import(data);
+  //     // maximizing throughput
+  //     console.log('Processing data for import...');
+  //     const result = await this.financeStockService.import(data);
 
-      console.log('Import successful:', result);
-      return this.ok({
-        message: '导入成功',
-        data: result,
-      });
-    } catch (error) {
-      console.error('导入失败:', error);
-      return this.fail('导入失败: ' + error.message);
-    }
-  }
+  //     console.log('Import successful:', result);
+  //     return this.ok({
+  //       message: '导入成功',
+  //       data: result,
+  //     });
+  //   } catch (error) {
+  //     console.error('导入失败:', error);
+  //     return this.fail('导入失败: ' + error.message);
+  //   }
+  // }
 }

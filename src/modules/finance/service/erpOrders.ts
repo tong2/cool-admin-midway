@@ -55,7 +55,6 @@ export class FinanceErpOrdersService extends BaseService {
 
     const [list, total] = await this.financeErpOrdersModel.findAndCount({
       where,
-      order: { transaction_time: 'DESC' },
       skip: (page - 1) * size,
       take: size,
     });

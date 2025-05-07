@@ -15,6 +15,7 @@ import { IMidwayApplication } from '@midwayjs/core';
 import * as swagger from '@midwayjs/swagger';
 // import * as rpc from '@cool-midway/rpc';
 // import * as task from '@cool-midway/task';
+import { IMidwayKoaApplication } from '@midwayjs/koa';
 
 @Configuration({
   imports: [
@@ -52,9 +53,22 @@ import * as swagger from '@midwayjs/swagger';
 export class ContainerLifeCycle {
   @App()
   app: IMidwayApplication;
+  @App()
+  app2: IMidwayKoaApplication;
 
   @Inject()
   logger: ILogger;
 
-  async onReady() {}
+  async onReady() {
+     // 打印所有请求日志
+     this.app2.use(async (ctx, next) => {
+      const startTime = Date.now();
+      // 打印请求参数
+      this.logger.info(`[${ctx.method}] ${ctx.path} - Params: ${JSON.stringify(ctx.request.body || ctx.request.query)}`);
+      await next();
+      const duration = Date.now() - startTime;
+      this.logger.info(`[${ctx.method}] ${ctx.path} - ${ctx.status} - ${duration}ms`);
+    });
+
+  }
 }

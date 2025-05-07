@@ -16,7 +16,7 @@ export class FinanceOrdersService extends BaseService {
    * Conditional query with pagination, supporting fuzzy matching
    * @param query - Query conditions
    */
-  async list(query: any) {
+  async orderPag(query: any) {
     const {
       page = 1,
       size = 10,
@@ -55,11 +55,9 @@ export class FinanceOrdersService extends BaseService {
 
     const [list, total] = await this.financeOrdersModel.findAndCount({
       where,
-      order: { order_submission_time: 'DESC' },
       skip: (page - 1) * size,
       take: size,
     });
-
     return { list, total };
   }
 

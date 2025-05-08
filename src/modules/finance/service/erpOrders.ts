@@ -23,6 +23,7 @@ export class FinanceErpOrdersService extends BaseService {
       order_number,
       order_status,
       order_source,
+      keyWord,
       transaction_time_start,
       transaction_time_end,
       ...otherParams
@@ -39,6 +40,9 @@ export class FinanceErpOrdersService extends BaseService {
     }
     if (order_source) {
       where.order_source = Like(`%${order_source}%`);
+    }
+    if (keyWord) {
+      where.order_number = Like(`%${keyWord}%`);
     }
 
     // Date range condition for transaction_time

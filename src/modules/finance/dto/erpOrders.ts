@@ -13,4 +13,7 @@ export class FinanceErpOrdersQueryDTO extends FinanceErpOrdersEntity {
   @Rule(RuleType.number().optional())
   size?: number;
 
+  @Rule(RuleType.string().optional())
+  keyWord?: string;
+
 }

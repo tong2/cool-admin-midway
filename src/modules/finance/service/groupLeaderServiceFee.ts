@@ -23,6 +23,7 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
       order_id,
       order_status,
       shop_name,
+      keyWord,
       payment_time_start,
       payment_time_end,
       ...otherParams
@@ -33,6 +34,9 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
     // Fuzzy matching for string fields
     if (order_id) {
       where.order_id = Like(`%${order_id}%`);
+    }
+    if (keyWord) {
+      where.order_id = Like(`%${keyWord}%`);
     }
     if (order_status) {
       where.order_status = Like(`%${order_status}%`);

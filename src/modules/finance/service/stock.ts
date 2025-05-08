@@ -23,6 +23,7 @@ export class FinanceStockService extends BaseService {
       product_code,
       brand_owner,
       supplier,
+      keyWord,
       ...otherParams
     } = query;
 
@@ -31,6 +32,9 @@ export class FinanceStockService extends BaseService {
     // Fuzzy matching for string fields
     if (product_code) {
       where.product_code = Like(`%${product_code}%`);
+    }
+    if (keyWord) {
+      where.product_code = Like(`%${keyWord}%`);
     }
     if (brand_owner) {
       where.brand_owner = Like(`%${brand_owner}%`);

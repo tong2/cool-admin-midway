@@ -14,5 +14,6 @@ export class FinanceGroupLeaderServiceFeeQueryDTO extends FinanceGroupLeaderServ
 
   @Rule(RuleType.number().optional())
   size?: number;
-
+  @Rule(RuleType.string().optional())
+  keyWord?: string;
 }

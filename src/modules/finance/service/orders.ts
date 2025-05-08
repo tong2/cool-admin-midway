@@ -25,6 +25,7 @@ export class FinanceOrdersService extends BaseService {
       order_status,
       startTime,
       endTime,
+      keyWord,
       ...otherParams
     } = query;
 
@@ -40,7 +41,9 @@ export class FinanceOrdersService extends BaseService {
     if (order_status) {
       where.order_status = Like(`%${order_status}%`);
     }
-
+    if (keyWord) {
+      where.sub_order_number = Like(`%${keyWord}%`);
+    }
     // Date range condition for order_submission_time
     if (startTime && endTime) {
       where.order_submission_time = Between(new Date(startTime), new Date(endTime));
@@ -74,12 +77,14 @@ export class FinanceOrdersService extends BaseService {
       order_status,
       startTime,
       endTime,
+      keyWord,
       ...otherParams
     } = query;
 
     // Build query using TypeORM query builder
     const queryBuilder = this.financeOrdersModel.createQueryBuilder('orders');
 
+    
     // Fuzzy matching for string fields
     if (main_order_number) {
       queryBuilder.andWhere('orders.main_order_number LIKE :main_order_number', {
@@ -94,6 +99,12 @@ export class FinanceOrdersService extends BaseService {
     if (order_status) {
       queryBuilder.andWhere('orders.order_status LIKE :order_status', {
         order_status: `%${order_status}%`,
+      });
+    }
+
+    if (keyWord) {
+      queryBuilder.andWhere('orders.selected_goods LIKE :keyWord', {
+        keyWord: `%${keyWord}%`,
       });
     }
 
@@ -114,7 +125,6 @@ export class FinanceOrdersService extends BaseService {
 
     // Apply pagination and sorting
     queryBuilder
-      .orderBy('orders.order_submission_time', 'DESC')
       .skip((page - 1) * size)
       .take(size);
 

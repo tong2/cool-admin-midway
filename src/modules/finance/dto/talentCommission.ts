@@ -14,4 +14,6 @@ export class FinanceTalentCommissionQueryDTO extends FinanceTalentCommissionEnti
   @Rule(RuleType.number().optional())
   size?: number;
 
+  @Rule(RuleType.string().optional())
+  keyWord?: string;
 }

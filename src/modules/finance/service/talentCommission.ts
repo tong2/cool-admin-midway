@@ -209,6 +209,7 @@ export class FinanceTalentCommissionService extends BaseService {
       entity.order_type = safeTrim(item['订单类型']) ?? null;
 
       // Date fields
+      entity.effect_time = item['生效时间'] ? new Date(item['生效时间']) : null;
       entity.payment_time = item['付款时间'] ? new Date(item['付款时间']) : null;
       entity.receipt_time = item['收货时间'] ? new Date(item['收货时间']) : null;
       entity.order_settlement_time = item['订单结算时间'] ? new Date(item['订单结算时间']) : null;

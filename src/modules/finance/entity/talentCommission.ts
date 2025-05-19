@@ -10,8 +10,8 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: '主键ID' })
   id: number;
 
-  @Column({ comment: '生效时间', nullable: true, type: 'timestamp' })
-  effect_time: Date;
+  @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
+  data_time: Date;
 
   @Column({ comment: '订单id', nullable: true, length: 50 })
   order_id: string;

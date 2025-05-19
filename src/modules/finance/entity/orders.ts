@@ -288,4 +288,25 @@ export class FinanceOrdersEntity extends BaseEntity {
 
   @Column({ comment: '建议发货时间（止）', nullable: true, type: 'timestamp' })
   suggested_delivery_end_time: Date;
+
+  @Column({ comment: '商品69码', nullable: true, length: 100 })
+  product69_code: string;
+
+  @Column({ comment: '发货SN码', nullable: true, length: 100 })
+  shipping_sn_code: string;
+
+  @Column({ comment: '发货IMEI码1', nullable: true, length: 100 })
+  shipping_imei_code1: string;
+
+  @Column({ comment: '发货IMEI码2', nullable: true, length: 100 })
+  shipping_imei_code2: string;
+
+  @Column({ comment: '物流SN码', nullable: true, length: 100 })
+  logistics_sn_code: string;
+
+  @Column({ comment: '物流IMEI码1', nullable: true, length: 100 })
+  logistics_imei_code1: string;
+
+  @Column({ comment: '物流IMEI码2', nullable: true, length: 100 })
+  logistics_imei_code2: string;
 }

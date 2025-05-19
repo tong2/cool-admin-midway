@@ -84,7 +84,7 @@ export class FinanceOrdersService extends BaseService {
     // Build query using TypeORM query builder
     const queryBuilder = this.financeOrdersModel.createQueryBuilder('orders');
 
-    
+
     // Fuzzy matching for string fields
     if (main_order_number) {
       queryBuilder.andWhere('orders.main_order_number LIKE :main_order_number', {
@@ -239,6 +239,13 @@ export class FinanceOrdersService extends BaseService {
       { key: 'scheduled_delivery_arrival_time', label: '计划配送到达时间' },
       { key: 'suggested_delivery_start_time', label: '建议配送开始时间' },
       { key: 'suggested_delivery_end_time', label: '建议配送结束时间' },
+      { key: 'product69_code', label: '商品69码' },
+      { key: 'shipping_sn_code', label: '发货SN码' },
+      { key: 'shipping_imei_code1', label: '发货IMEI码1' },
+      { key: 'shipping_imei_code2', label: '发货IMEI码2' },
+      { key: 'logistics_sn_code', label: '物流SN码' },
+      { key: 'logistics_imei_code1', label: '物流IMEI码1' },
+      { key: 'logistics_imei_code2', label: '物流IMEI码2' },
     ];
 
     // Format data for export
@@ -312,6 +319,13 @@ export class FinanceOrdersService extends BaseService {
       entity.platform_discount = safeTrim(item['平台优惠']) ?? null;
       entity.is_platform_warehouse_auto_transfer = safeTrim(item['是否平台仓自流转']) ?? null;
       entity.vehicle_type = safeTrim(item['车型']) ?? null;
+      entity.product69_code = safeTrim(item['商品69码']) ?? null;
+      entity.shipping_sn_code = safeTrim(item['发货SN码']) ?? null;
+      entity.shipping_imei_code1 = safeTrim(item['发货IMEI码1']) ?? null;
+      entity.shipping_imei_code2 = safeTrim(item['发货IMEI码2']) ?? null;
+      entity.logistics_sn_code = safeTrim(item['物流SN码']) ?? null;
+      entity.logistics_imei_code1 = safeTrim(item['物流IMEI码1']) ?? null;
+      entity.logistics_imei_code2 = safeTrim(item['物流IMEI码2']) ?? null;
 
       // Convert dates correctly
       entity.order_submission_time = item['订单提交时间'] ? new Date(item['订单提交时间']) : null;

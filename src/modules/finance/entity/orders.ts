@@ -9,6 +9,9 @@ export class FinanceOrdersEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: '主键ID' })
   id: number;
 
+  @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
+  data_time: Date;
+
   @Column({ comment: '主订单编号', nullable: true, length: 50 })
   main_order_number: string;
 

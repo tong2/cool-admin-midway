@@ -338,7 +338,7 @@ export class FinanceOrdersService extends BaseService {
       entity.scheduled_delivery_arrival_time = item['预约送达时间'] ? new Date(item['预约送达时间']) : null;
       entity.suggested_delivery_start_time = item['建议发货时间（起）'] ? new Date(item['建议发货时间（起）']) : null;
       entity.suggested_delivery_end_time = item['建议发货时间（止）'] ? new Date(item['建议发货时间（止）']) : null;
-
+      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
       // Handle numeric fields
       entity.product_quantity = parseInt(item['商品数量'], 10) || null;
       entity.product_price = parseFloat(item['商品单价']) || null;

@@ -37,7 +37,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '商品单价', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
   })
   product_price: number;
 
@@ -45,7 +45,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '订单应付金额', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
   })
   order_payable_amount: number;
 
@@ -53,7 +53,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '运费', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   shipping_fee: number;
@@ -62,7 +62,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '优惠总金额', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   total_discount_amount: number;
@@ -75,7 +75,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '商家优惠', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   merchant_discount: number;
@@ -84,7 +84,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '达人优惠', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   influencer_discount: number;
@@ -93,7 +93,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '商家改价', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   merchant_price_adjustment: number;
@@ -102,7 +102,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '支付优惠', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   payment_discount: number;
@@ -111,7 +111,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '红包抵扣', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   red_envelope_deduction: number;
@@ -123,7 +123,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '手续费', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   transaction_fee: number;
@@ -240,7 +240,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '降价类优惠', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   price_reduction_discount: number;
@@ -249,7 +249,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '平台实际承担优惠金额', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   platform_actual_discount: number;
@@ -258,7 +258,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '商家实际承担优惠金额', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   merchant_actual_discount: number;
@@ -267,7 +267,7 @@ export class FinanceOrdersEntity extends BaseEntity {
     comment: '达人实际承担优惠金额', nullable: true,
     type: 'decimal',
     precision: 10,
-    scale: 2,
+    scale: 4,
 
   })
   influencer_actual_discount: number;

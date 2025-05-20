@@ -20,8 +20,8 @@ export class FinanceAccountingService extends BaseService {
     const {
       page = 1,
       size = 10,
-      subOrderNo,
-      productId,
+      sub_order_no,
+      product_id,
       merchantCode,
       keyWord,
       ...otherParams
@@ -30,17 +30,14 @@ export class FinanceAccountingService extends BaseService {
     const where: FindOptionsWhere<FinanceAccountingEntity> = {};
 
     // 字符串字段的模糊匹配
-    if (subOrderNo) {
-      where.subOrderNo = Like(`%${subOrderNo}%`);
+    if (sub_order_no) {
+      where.sub_order_no = Like(`%${sub_order_no}%`);
     }
-    if (productId) {
-      where.productId = Like(`%${productId}%`);
-    }
-    if (merchantCode) {
-      where.merchantCode = Like(`%${merchantCode}%`);
+    if (product_id) {
+      where.product_id = Like(`%${product_id}%`);
     }
     if (keyWord) {
-      where.productId = Like(`%${keyWord}%`);
+      where.product_id = Like(`%${keyWord}%`);
     }
 
     // 其他动态条件（精确匹配）

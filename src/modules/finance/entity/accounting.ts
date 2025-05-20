@@ -11,9 +11,9 @@ export class FinanceAccountingEntity extends BaseEntity {
 
   @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
   data_time: Date;
-  
+
   @Column({ comment: '子订单编号', nullable: true })
-  subOrderNo: string;
+  sub_order_no: string;
 
   @Column({ comment: '状态', nullable: true })
   status: string;
@@ -22,53 +22,53 @@ export class FinanceAccountingEntity extends BaseEntity {
   warehouse: string;
 
   @Column({ comment: '交易日期', type: 'datetime', nullable: true })
-  tradeDate: Date;
+  trade_date: Date;
 
   @Column({ comment: '商品ID', nullable: true })
-  productId: string;
+  product_id: string;
 
   @Column({ comment: '商家编码', nullable: true })
-  merchantCode: string;
+  merchant_code: string;
 
   @Column({ comment: '订单数量', type: 'int', nullable: true })
-  orderQuantity: number;
+  order_quantity: number;
 
   @Column({ comment: '订单应付金额', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  orderPayableAmount: number;
+  order_payable_amount: number;
 
   @Column({ comment: '实际平台补贴', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  actualPlatformSubsidy: number;
+  actual_platform_subsidy: number;
 
   @Column({ comment: '达人实际承担优惠金额', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  influencerDiscountAmount: number;
+  influencer_discount_amount: number;
 
   @Column({ comment: '实销', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  actualSales: number;
+  actual_sales: number;
 
   @Column({ comment: '平台补贴扣费（2%）', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  platformSubsidyFee: number;
+  platform_subsidy_fee: number;
 
   @Column({ comment: '平台服务费', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  platformServiceFee: number;
+  platform_service_fee: number;
 
   @Column({ comment: '达人佣金', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  influencerCommission: number;
+  influencer_commission: number;
 
   @Column({ comment: '团长服务费', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  groupLeaderServiceFee: number;
+  group_leader_service_fee: number;
 
   @Column({ comment: '成本', type: 'decimal', precision: 10, scale: 2, nullable: true })
   cost: number;
 
   @Column({ comment: '快递费', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  shippingFee: number;
+  shipping_fee: number;
 
   @Column({ comment: '操作费', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  operationFee: number;
+  operation_fee: number;
 
   @Column({ comment: '利润', type: 'decimal', precision: 10, scale: 2, nullable: true })
   profit: number;
 
   @Column({ comment: '毛利率', type: 'decimal', precision: 5, scale: 2, nullable: true })
-  grossMargin: number;
+  gross_margin: number;
 }

@@ -181,4 +181,35 @@ export class FinanceCostController extends BaseController {
       return this.fail('查询失败: ' + error.message);
     }
   }
+
+  @Get('/latest-data-time', { summary: 'Get the latest data_time from FinanceCostEntity' })
+  async getLatestDataTime() {
+    try {
+      const result = await this.financeCostModel
+        .createQueryBuilder('financeCost')
+        .select('MAX(financeCost.data_time)', 'latestDataTime')
+        .getRawOne();
+
+      if (!result || !result.latestDataTime) {
+        return this.ok({
+          code: 1000,
+          data: null,
+          message: 'No data available',
+        });
+      }
+
+      // Ensure the date is returned as YYYY-MM-DD string
+      const latestDate = result.latestDataTime instanceof Date
+        ? result.latestDataTime.toISOString().split('T')[0]
+        : result.latestDataTime;
+
+      return this.ok({
+        code: 1000,
+        data: latestDate,
+        message: 'Success',
+      });
+    } catch (error) {
+      return this.fail('Failed to retrieve latest data time' + error.message);
+    }
+  }
 }

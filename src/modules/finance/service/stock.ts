@@ -95,6 +95,7 @@ export class FinanceStockService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
+      { key: 'data_time', label: '数据时间' },
       { key: 'product_code', label: '商品编码' },
       { key: 'weight', label: '重量' },
       { key: 'purchase_price', label: '采购价' },

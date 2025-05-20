@@ -106,6 +106,7 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
+      { key: 'data_time', label: '数据时间' },
       { key: 'order_id', label: '订单id' },
       { key: 'product_name', label: '商品名称' },
       { key: 'product_id', label: '商品id' },

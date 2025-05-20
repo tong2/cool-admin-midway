@@ -174,6 +174,7 @@ export class FinanceOrdersService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
+      { key: 'data_time', label: '数据时间' },
       { key: 'main_order_number', label: '主订单编号' },
       { key: 'sub_order_number', label: '子订单编号' },
       { key: 'selected_goods', label: '所选商品' },

@@ -191,6 +191,7 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
       entity.receipt_time = item['收货时间'] ? new Date(item['收货时间']) : null;
       entity.settlement_time = item['结算时间'] ? new Date(item['结算时间']) : null;
       entity.final_payment_time = item['尾款支付时间'] ? new Date(item['尾款支付时间']) : null;
+      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
 
       // Numeric fields
       entity.payment_amount = parseFloat(item['支付金额']) || null;

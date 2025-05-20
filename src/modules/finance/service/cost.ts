@@ -149,6 +149,8 @@ export class FinanceCostService extends BaseService {
       entity.unit_weight = parseFloat(item['单品重量']) || null;
       entity.cost_price = parseFloat(item['成本价']) || null;
 
+      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
+
       return entity;
     });
 

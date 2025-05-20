@@ -10,6 +10,9 @@ export class FinanceStockEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: '主键ID' })
   id: number;
 
+  @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
+  data_time: Date;
+
   @Column({ comment: '商品编码', nullable: true, length: 50 })
   product_code: string;
 

@@ -161,7 +161,8 @@ export class FinanceStockService extends BaseService {
       entity.purchase_price = parseFloat(item['采购价']) || null;
       entity.payment_price = parseFloat(item['打款价']) || null;
       entity.product_quantity = parseInt(item['商品数量'], 10) || null;
-      
+
+      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
 
       return entity;
     });

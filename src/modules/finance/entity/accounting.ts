@@ -33,42 +33,42 @@ export class FinanceAccountingEntity extends BaseEntity {
   @Column({ comment: '订单数量', type: 'int', nullable: true })
   order_quantity: number;
 
-  @Column({ comment: '订单应付金额', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '订单应付金额', type: 'decimal', precision: 10, scale: 4, nullable: true })
   order_payable_amount: number;
 
-  @Column({ comment: '实际平台补贴', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '实际平台补贴', type: 'decimal', precision: 10, scale: 4, nullable: true })
   actual_platform_subsidy: number;
 
-  @Column({ comment: '达人实际承担优惠金额', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '达人实际承担优惠金额', type: 'decimal', precision: 10, scale: 4, nullable: true })
   influencer_discount_amount: number;
 
-  @Column({ comment: '实销', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '实销', type: 'decimal', precision: 10, scale: 4, nullable: true })
   actual_sales: number;
 
-  @Column({ comment: '平台补贴扣费（2%）', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '平台补贴扣费（2%）', type: 'decimal', precision: 10, scale: 4, nullable: true })
   platform_subsidy_fee: number;
 
-  @Column({ comment: '平台服务费', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '平台服务费', type: 'decimal', precision: 10, scale: 4, nullable: true })
   platform_service_fee: number;
 
-  @Column({ comment: '达人佣金', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '达人佣金', type: 'decimal', precision: 10, scale: 4, nullable: true })
   influencer_commission: number;
 
-  @Column({ comment: '团长服务费', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '团长服务费', type: 'decimal', precision: 10, scale: 4, nullable: true })
   group_leader_service_fee: number;
 
-  @Column({ comment: '成本', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '成本', type: 'decimal', precision: 10, scale: 4, nullable: true })
   cost: number;
 
-  @Column({ comment: '快递费', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '快递费', type: 'decimal', precision: 10, scale: 4, nullable: true })
   shipping_fee: number;
 
-  @Column({ comment: '操作费', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '操作费', type: 'decimal', precision: 10, scale: 4, nullable: true })
   operation_fee: number;
 
-  @Column({ comment: '利润', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ comment: '利润', type: 'decimal', precision: 10, scale: 4, nullable: true })
   profit: number;
 
-  @Column({ comment: '毛利率', type: 'decimal', precision: 5, scale: 2, nullable: true })
+  @Column({ comment: '毛利率', type: 'decimal', precision: 5, scale: 4, nullable: true })
   gross_margin: number;
 }

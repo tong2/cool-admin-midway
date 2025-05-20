@@ -215,6 +215,23 @@ export class FinanceErpOrdersService extends BaseService {
       }
       return value;
     };
+    const safeDate = (value: any): Date | null => {
+      if (!value || value === '-') {
+        return null; // Handle falsy values or "-" as null
+      }
+      try {
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          return null; // Handle invalid dates
+        }
+        // Set time to 00:00:00 to keep only year, month, day
+        date.setHours(0, 0, 0, 0);
+        return date;
+      } catch {
+        return null; // Handle errors during date parsing
+      }
+    };
+
 
     const entities = data.map(item => {
       const entity = new FinanceErpOrdersEntity();
@@ -274,13 +291,13 @@ export class FinanceErpOrdersService extends BaseService {
       entity.platform_tags = safeTrim(item['平台标签']) ?? null;
 
       // Date fields
-      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
-      entity.order_time = item['下单时间'] ? new Date(item['下单时间']) : null;
-      entity.payment_time = item['付款时间'] ? new Date(item['付款时间']) : null;
-      entity.dispatch_time = item['派送时间'] ? new Date(item['派送时间']) : null;
-      entity.activation_time = item['激活时间'] ? new Date(item['激活时间']) : null;
-      entity.submission_time = item['递交时间'] ? new Date(item['递交时间']) : null;
-      entity.latest_delivery_time = item['最晚送达时间'] ? new Date(item['最晚送达时间']) : null;
+      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
+      entity.order_time = item['下单时间'] ? safeDate(item['下单时间']) : null;
+      entity.payment_time = item['付款时间'] ? safeDate(item['付款时间']) : null;
+      entity.dispatch_time = item['派送时间'] ? safeDate(item['派送时间']) : null;
+      entity.activation_time = item['激活时间'] ? safeDate(item['激活时间']) : null;
+      entity.submission_time = item['递交时间'] ? safeDate(item['递交时间']) : null;
+      entity.latest_delivery_time = item['最晚送达时间'] ? safeDate(item['最晚送达时间']) : null;
 
       // Numeric fields
       entity.product_variety_count = parseInt(item['货品种类数'], 10) || null;

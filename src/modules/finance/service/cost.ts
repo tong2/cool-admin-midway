@@ -134,6 +134,23 @@ export class FinanceCostService extends BaseService {
       return value;
     };
 
+    const safeDate = (value: any): Date | null => {
+      if (!value || value === '-') {
+        return null; // Handle falsy values or "-" as null
+      }
+      try {
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          return null; // Handle invalid dates
+        }
+        // Set time to 00:00:00 to keep only year, month, day
+        date.setHours(0, 0, 0, 0);
+        return date;
+      } catch {
+        return null; // Handle errors during date parsing
+      }
+    };
+
     const entities = data.map(item => {
       const entity = new FinanceCostEntity();
 
@@ -150,7 +167,7 @@ export class FinanceCostService extends BaseService {
       entity.unit_weight = parseFloat(item['单品重量']) || null;
       entity.cost_price = parseFloat(item['成本价']) || null;
 
-      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
+      entity.data_time = safeDate(item['数据时间']);
 
       return entity;
     });

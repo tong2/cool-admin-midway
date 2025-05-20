@@ -12,7 +12,7 @@ export class FinanceCostEntity extends BaseEntity {
 
   @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
   data_time: Date;
-  
+
   @Column({ comment: '商家编码', nullable: true, length: 50 })
   merchant_code: string;
 
@@ -31,13 +31,13 @@ export class FinanceCostEntity extends BaseEntity {
   @Column({ comment: '规格名称', nullable: true, length: 100 })
   specification_name: string;
 
-  @Column({ comment: '单品重量', nullable: true, type: 'decimal', precision: 10, scale: 2 })
+  @Column({ comment: '单品重量', nullable: true, type: 'decimal', precision: 10, scale: 4 })
   unit_weight: number;
 
   @Column({ comment: '品牌', nullable: true, length: 50 })
   brand: string;
 
-  @Column({ comment: '成本价', nullable: true, type: 'decimal', precision: 10, scale: 2 })
+  @Column({ comment: '成本价', nullable: true, type: 'decimal', precision: 10, scale: 4 })
   cost_price: number;
 
 }

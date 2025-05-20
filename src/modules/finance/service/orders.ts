@@ -274,6 +274,24 @@ export class FinanceOrdersService extends BaseService {
       return value;
     };
 
+    const safeDate = (value: any): Date | null => {
+      if (!value || value === '-') {
+        return null; // Handle falsy values or "-" as null
+      }
+      try {
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          return null; // Handle invalid dates
+        }
+        // Set time to 00:00:00 to keep only year, month, day
+        date.setHours(0, 0, 0, 0);
+        return date;
+      } catch {
+        return null; // Handle errors during date parsing
+      }
+    };
+
+
     const entities = data.map(item => {
       const entity = new FinanceOrdersEntity();
 
@@ -329,17 +347,17 @@ export class FinanceOrdersService extends BaseService {
       entity.logistics_imei_code2 = safeTrim(item['物流IMEI码2']) ?? null;
 
       // Convert dates correctly
-      entity.order_submission_time = item['订单提交时间'] ? new Date(item['订单提交时间']) : null;
-      entity.order_completion_time = item['订单完成时间'] ? new Date(item['订单完成时间']) : null;
-      entity.payment_completion_time = item['支付完成时间'] ? new Date(item['支付完成时间']) : null;
-      entity.promised_delivery_time = item['承诺发货时间'] ? new Date(item['承诺发货时间']) : null;
-      entity.scheduled_delivery_time = item['预约发货时间'] ? new Date(item['预约发货时间']) : null;
-      entity.delivery_time = item['发货时间'] ? new Date(item['发货时间']) : null;
-      entity.estimated_delivery_time = item['预计送达时间'] ? new Date(item['预计送达时间']) : null;
-      entity.scheduled_delivery_arrival_time = item['预约送达时间'] ? new Date(item['预约送达时间']) : null;
-      entity.suggested_delivery_start_time = item['建议发货时间（起）'] ? new Date(item['建议发货时间（起）']) : null;
-      entity.suggested_delivery_end_time = item['建议发货时间（止）'] ? new Date(item['建议发货时间（止）']) : null;
-      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
+      entity.order_submission_time = item['订单提交时间'] ? safeDate(item['订单提交时间']) : null;
+      entity.order_completion_time = item['订单完成时间'] ? safeDate(item['订单完成时间']) : null;
+      entity.payment_completion_time = item['支付完成时间'] ? safeDate(item['支付完成时间']) : null;
+      entity.promised_delivery_time = item['承诺发货时间'] ? safeDate(item['承诺发货时间']) : null;
+      entity.scheduled_delivery_time = item['预约发货时间'] ? safeDate(item['预约发货时间']) : null;
+      entity.delivery_time = item['发货时间'] ? safeDate(item['发货时间']) : null;
+      entity.estimated_delivery_time = item['预计送达时间'] ? safeDate(item['预计送达时间']) : null;
+      entity.scheduled_delivery_arrival_time = item['预约送达时间'] ? safeDate(item['预约送达时间']) : null;
+      entity.suggested_delivery_start_time = item['建议发货时间（起）'] ? safeDate(item['建议发货时间（起）']) : null;
+      entity.suggested_delivery_end_time = item['建议发货时间（止）'] ? safeDate(item['建议发货时间（止）']) : null;
+      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
       // Handle numeric fields
       entity.product_quantity = parseInt(item['商品数量'], 10) || null;
       entity.product_price = parseFloat(item['商品单价']) || null;

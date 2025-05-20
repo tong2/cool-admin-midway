@@ -140,6 +140,23 @@ export class FinanceStockService extends BaseService {
       }
       return value;
     };
+    const safeDate = (value: any): Date | null => {
+      if (!value || value === '-') {
+        return null; // Handle falsy values or "-" as null
+      }
+      try {
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          return null; // Handle invalid dates
+        }
+        // Set time to 00:00:00 to keep only year, month, day
+        date.setHours(0, 0, 0, 0);
+        return date;
+      } catch {
+        return null; // Handle errors during date parsing
+      }
+    };
+
 
     const entities = data.map(item => {
       const entity = new FinanceStockEntity();
@@ -163,7 +180,7 @@ export class FinanceStockService extends BaseService {
       entity.payment_price = parseFloat(item['打款价']) || null;
       entity.product_quantity = parseInt(item['商品数量'], 10) || null;
 
-      entity.data_time = item['数据时间'] ? new Date(item['数据时间']) : null;
+      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
 
       return entity;
     });

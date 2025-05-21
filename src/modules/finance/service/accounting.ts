@@ -4,8 +4,11 @@ import { Provide } from '@midwayjs/decorator';
 import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Like } from 'typeorm';
+
 const safe = (v: any, fallback: any = '') => v ?? fallback;
 const safeNum = (v: any, fallback = 0) => isNaN(Number(v)) ? fallback : Number(v);
+const safeNum2= (v: string | number | null | undefined, fallback = 0): number =>
+  isNaN(Number(v)) ? fallback : Number(Number(v).toFixed(2));
 /**
  * 核算表服务
  */
@@ -71,17 +74,13 @@ export class FinanceAccountingService extends BaseService {
         throw new Error('Invalid date provided');
       }
 
-      // Normalize date to start and end of the day
+      // Normalize date to start of the day
       const startDate = new Date(genDataTime);
       startDate.setHours(0, 0, 0, 0);
-      const endDate = new Date(startDate);
-      endDate.setHours(23, 59, 59, 999);
 
       // Check if finance_accounting data exists for the date
       const existingAccountingRecord = await this.financeAccountingModel.findOne({
-        where: {
-          gen_data_time: startDate,
-        },
+        where: { gen_data_time: startDate },
       });
 
       if (existingAccountingRecord) {
@@ -91,48 +90,39 @@ export class FinanceAccountingService extends BaseService {
 
       // Query finance_finish data for the date
       const finishRecords = await this.financeFinishModel.find({
-        where: {
-          gen_data_time: startDate,
-        },
+        where: { gen_data_time: startDate },
       });
 
-      if (!finishRecords || finishRecords.length === 0) {
+      if (finishRecords.length === 0) {
         console.log(`No finance_finish data found for ${startDate.toISOString().split('T')[0]}`);
         return `该数据日期的完成表未生成`;
       }
 
+      // Helper to apply negative sign if non-zero
+      const negateIfNonZero = (value: number): number => (value !== 0 ? -value : 0);
+
       // Process each finish record to generate accounting records
       const accountingRecords: Partial<FinanceAccountingEntity>[] = finishRecords.map(record => {
-        // Use safe and safeNum for data cleaning
+        // Data cleaning with safe and safeNum
         const orderPayableAmount = safeNum(record.order_payable_amount);
         const actualPlatformSubsidy = safeNum(record.platform_actual_discount);
         const influencerDiscountAmount = safeNum(record.talent_actual_discount);
         const platformServiceFee = safeNum(record.platform_service_fee);
-        const influencerCommission = safeNum(record.talent_actual_discount); // Placeholder
-        const groupLeaderServiceFee = safeNum(record.platform_service_fee); // Placeholder
+        // Placeholder: Set to 0 until correct mappings are provided
+        const influencerCommission = 0;
+        const groupLeaderServiceFee = 0;
         const cost = safeNum(record.total_cost);
         const shippingFee = safeNum(record.shipping_fee);
         const operationFee = safeNum(record.operation_fee);
 
-        // Calculate derived fields
-        const actualSales = orderPayableAmount + actualPlatformSubsidy + influencerDiscountAmount;
-        const platformSubsidyFee = actualPlatformSubsidy * 0.05;
-        const platformSubsidyFee2Percent = platformSubsidyFee * 0.02;
-        const profit = actualSales - platformSubsidyFee - platformServiceFee - influencerCommission - groupLeaderServiceFee - cost - shippingFee;
-        const grossMargin = actualSales !== 0 ? profit / actualSales : 0;
+        // Calculate derived fields with 2-decimal precision
+        const actualSales = safeNum2(orderPayableAmount + actualPlatformSubsidy + influencerDiscountAmount);
+        const platformSubsidyFeeBase = safeNum2(actualPlatformSubsidy * 0.05); // Intermediate calculation
+        const platformSubsidyFee = safeNum2(platformSubsidyFeeBase * 0.02); // Final platform_subsidy_fee (2%)
+        const profit = safeNum2(actualSales - platformSubsidyFeeBase - platformServiceFee - influencerCommission - groupLeaderServiceFee - cost - shippingFee);
+        const grossMargin = actualSales !== 0 ? safeNum2(profit / actualSales) : 0;
 
-        // Apply negative signs to specified fields if non-zero
-        const finalPlatformSubsidyFee = platformSubsidyFee !== 0 ? -platformSubsidyFee : 0;
-        const finalPlatformServiceFee = platformServiceFee !== 0 ? -platformServiceFee : 0;
-        const finalInfluencerCommission = influencerCommission !== 0 ? -influencerCommission : 0;
-        const finalGroupLeaderServiceFee = groupLeaderServiceFee !== 0 ? -groupLeaderServiceFee : 0;
-        const finalCost = cost !== 0 ? -cost : 0;
-        const finalShippingFee = shippingFee !== 0 ? -shippingFee : 0;
-        const finalOperationFee = operationFee !== 0 ? -operationFee : 0;
-        const finalProfit = profit !== 0 ? -profit : 0;
-        const finalGrossMargin = grossMargin !== 0 ? -grossMargin : 0;
-
-        // Create accounting record
+        // Apply negative signs to specified fields
         return {
           sub_order_no: safe(record.sub_order_number),
           product_id: safe(record.product_id),
@@ -140,20 +130,20 @@ export class FinanceAccountingService extends BaseService {
           warehouse: safe(record.warehouse_name),
           status: safe(record.status),
           trade_date: record.transaction_time ?? startDate,
-          order_quantity: safeNum(record.order_quantity, 1),
+          order_quantity: safeNum(record.product_quantity),
           order_payable_amount: orderPayableAmount,
           actual_platform_subsidy: actualPlatformSubsidy,
           influencer_discount_amount: influencerDiscountAmount,
           actual_sales: actualSales,
-          platform_subsidy_fee: finalPlatformSubsidyFee,
-          platform_service_fee: finalPlatformServiceFee,
-          influencer_commission: finalInfluencerCommission,
-          group_leader_service_fee: finalGroupLeaderServiceFee,
-          cost: finalCost,
-          shipping_fee: finalShippingFee,
-          operation_fee: finalOperationFee,
-          profit: finalProfit,
-          gross_margin: finalGrossMargin,
+          platform_subsidy_fee: negateIfNonZero(platformSubsidyFee),
+          platform_service_fee: negateIfNonZero(platformServiceFee),
+          influencer_commission: negateIfNonZero(influencerCommission),
+          group_leader_service_fee: negateIfNonZero(groupLeaderServiceFee),
+          cost: negateIfNonZero(cost),
+          shipping_fee: negateIfNonZero(shippingFee),
+          operation_fee: negateIfNonZero(operationFee),
+          profit: negateIfNonZero(profit),
+          gross_margin: negateIfNonZero(grossMargin),
           gen_data_time: startDate,
         };
       });

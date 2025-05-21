@@ -124,6 +124,7 @@ export class FinanceFinishService extends BaseService {
     } else {
       // 如果指定日期无数据，查找最新的 gen_data_time
       const latestCost = await this.financeCostModel.findOne({
+        where: { gen_data_time: LessThanOrEqual(endOfDay) },
         order: { gen_data_time: 'DESC' },
       });
       if (!latestCost) {
@@ -147,11 +148,11 @@ export class FinanceFinishService extends BaseService {
 
     // 计算每个主订单的邮资费用
     const shippingFeeByMainOrder = erpOrders.reduce((acc, erpOrder) => {
-      const mainOrder = orders.find(o => o.sub_order_number === erpOrder.order_number)?.main_order_number;
+      const mainOrder = orders.find(o => o.sub_order_number === erpOrder.original_order_no)?.main_order_number;
       if (mainOrder) {
         acc[mainOrder] = (acc[mainOrder] || 0) + (erpOrder.shipping_fee || 0);
       } else {
-        console.warn(`未找到匹配的主订单: ERP order_number=${erpOrder.order_number}`);
+        console.warn(`未找到匹配的主订单: ERP order_number=${erpOrder.original_order_no}`);
       }
       return acc;
     }, {} as Record<string, number>);
@@ -244,19 +245,22 @@ export class FinanceFinishService extends BaseService {
         entity.logistics_imei_code_2 = order.logistics_imei_code2;
 
         // 计算字段
-        // 单位成本：从 merchant_code 提取数字
+        // 单位成本：从 merchant_code 提取最后一个“-”分隔部分的数字
         const codeParts = order.merchant_code.split('-');
         const lastPart = codeParts[codeParts.length - 1].replace('包', '');
         entity.unit_cost = parseInt(lastPart, 10) || 0;
 
+        // 截取商品编码：最后一个“-”之前的内容
+        const truncatedMerchantCode = codeParts.slice(0, -1).join('-');
+
         // 订单数量：product_quantity * unit_cost
         entity.order_quantity = order.product_quantity * entity.unit_cost;
 
-        // 查询成本数据，使用确定的 costDataTime
+        // 查询成本数据，使用截取的商品编码和确定的 costDataTime
         try {
           const cost = await this.financeCostModel.findOne({
             where: {
-              product_number: order.product_id,
+              merchant_code: truncatedMerchantCode,
               gen_data_time: costDataTime,
             },
           });
@@ -267,12 +271,12 @@ export class FinanceFinishService extends BaseService {
             // 重量：unit_weight * order_quantity
             entity.weight = Number((cost.unit_weight * entity.order_quantity).toFixed(2));
           } else {
-            console.warn(`成本数据未找到: product_id=${order.product_id}, gen_data_time=${costDataTime}`);
+            console.warn(`成本数据未找到: merchant_code=${truncatedMerchantCode}, gen_data_time=${costDataTime}`);
             entity.total_cost = 0;
             entity.weight = 0;
           }
         } catch (error) {
-          console.error(`查询成本数据失败: product_id=${order.product_id}, 错误: ${error.message}`);
+          console.error(`查询成本数据失败: merchant_code=${truncatedMerchantCode}, 错误: ${error.message}`);
           entity.total_cost = 0;
           entity.weight = 0;
         }
@@ -282,7 +286,7 @@ export class FinanceFinishService extends BaseService {
         entity.platform_service_fee = Number(
           (
             rate *
-            (order.order_payable_amount +
+            ((order.order_payable_amount || 0)+
               (order.platform_actual_discount || 0) +
               (order.influencer_actual_discount || 0))
           ).toFixed(2)

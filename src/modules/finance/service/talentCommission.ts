@@ -106,7 +106,7 @@ export class FinanceTalentCommissionService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' },
       { key: 'order_id', label: '订单id' },
       { key: 'product_id', label: '商品id' },
       { key: 'product_name', label: '商品名称' },
@@ -227,7 +227,7 @@ export class FinanceTalentCommissionService extends BaseService {
       entity.order_type = safeTrim(item['订单类型']) ?? null;
 
       // Date fields
-      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
+      entity.gen_data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
       entity.payment_time = item['付款时间'] ? safeDate(item['付款时间']) : null;
       entity.receipt_time = item['收货时间'] ? safeDate(item['收货时间']) : null;
       entity.order_settlement_time = item['订单结算时间'] ? safeDate(item['订单结算时间']) : null;

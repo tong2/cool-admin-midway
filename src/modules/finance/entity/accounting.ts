@@ -10,7 +10,7 @@ export class FinanceAccountingEntity extends BaseEntity {
   id: number;
 
   @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
-  data_time: Date;
+  gen_data_time: Date;
 
   @Column({ comment: '子订单编号', nullable: true })
   sub_order_no: string;

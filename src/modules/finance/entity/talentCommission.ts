@@ -11,7 +11,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
   id: number;
 
   @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
-  data_time: Date;
+  gen_data_time: Date;
 
   @Column({ comment: '订单id', nullable: true, length: 50 })
   order_id: string;

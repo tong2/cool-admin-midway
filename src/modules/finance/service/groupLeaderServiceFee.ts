@@ -106,7 +106,7 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' },
       { key: 'order_id', label: '订单id' },
       { key: 'product_name', label: '商品名称' },
       { key: 'product_id', label: '商品id' },
@@ -210,7 +210,7 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
       entity.receipt_time = item['收货时间'] ? safeDate(item['收货时间']) : null;
       entity.settlement_time = item['结算时间'] ? safeDate(item['结算时间']) : null;
       entity.final_payment_time = item['尾款支付时间'] ? safeDate(item['尾款支付时间']) : null;
-      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
+      entity.gen_data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
 
       // Numeric fields
       entity.payment_amount = parseFloat(item['支付金额']) || null;

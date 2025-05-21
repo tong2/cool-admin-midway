@@ -11,7 +11,7 @@ export class FinanceCostEntity extends BaseEntity {
   id: number;
 
   @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
-  data_time: Date;
+  gen_data_time: Date;
 
   @Column({ comment: '商家编码', nullable: true, length: 50 })
   merchant_code: string;

@@ -174,7 +174,7 @@ export class FinanceOrdersService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' },
       { key: 'main_order_number', label: '主订单编号' },
       { key: 'sub_order_number', label: '子订单编号' },
       { key: 'selected_goods', label: '所选商品' },
@@ -357,7 +357,7 @@ export class FinanceOrdersService extends BaseService {
       entity.scheduled_delivery_arrival_time = item['预约送达时间'] ? safeDate(item['预约送达时间']) : null;
       entity.suggested_delivery_start_time = item['建议发货时间（起）'] ? safeDate(item['建议发货时间（起）']) : null;
       entity.suggested_delivery_end_time = item['建议发货时间（止）'] ? safeDate(item['建议发货时间（止）']) : null;
-      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
+      entity.gen_data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
       // Handle numeric fields
       entity.product_quantity = parseInt(item['商品数量'], 10) || null;
       entity.product_price = parseFloat(item['商品单价']) || null;

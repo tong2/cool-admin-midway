@@ -182,12 +182,12 @@ export class FinanceCostController extends BaseController {
     }
   }
 
-  @Get('/latest-data-time', { summary: 'Get the latest data_time from FinanceCostEntity' })
+  @Get('/latest-data-time', { summary: 'Get the latest gen_data_time from FinanceCostEntity' })
   async getLatestDataTime() {
     try {
       const result = await this.financeCostModel
         .createQueryBuilder('financeCost')
-        .select('MAX(financeCost.data_time)', 'latestDataTime')
+        .select('MAX(financeCost.gen_data_time)', 'latestDataTime')
         .getRawOne();
 
       if (!result || !result.latestDataTime) {

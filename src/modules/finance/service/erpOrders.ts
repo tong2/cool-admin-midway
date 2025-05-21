@@ -104,7 +104,7 @@ export class FinanceErpOrdersService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' },
       { key: 'order_number', label: '订单编号' },
       { key: 'platform_type', label: '平台类型' },
       { key: 'shop_name', label: '店铺名称' },
@@ -291,7 +291,7 @@ export class FinanceErpOrdersService extends BaseService {
       entity.platform_tags = safeTrim(item['平台标签']) ?? null;
 
       // Date fields
-      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
+      entity.gen_data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
       entity.order_time = item['下单时间'] ? safeDate(item['下单时间']) : null;
       entity.payment_time = item['付款时间'] ? safeDate(item['付款时间']) : null;
       entity.dispatch_time = item['派送时间'] ? safeDate(item['派送时间']) : null;

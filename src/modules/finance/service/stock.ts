@@ -95,7 +95,7 @@ export class FinanceStockService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' },
       { key: 'product_code', label: '商品编码' },
       { key: 'weight', label: '重量' },
       { key: 'purchase_price', label: '采购价' },
@@ -180,7 +180,7 @@ export class FinanceStockService extends BaseService {
       entity.payment_price = parseFloat(item['打款价']) || null;
       entity.product_quantity = parseInt(item['商品数量'], 10) || null;
 
-      entity.data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
+      entity.gen_data_time = item['数据时间'] ? safeDate(item['数据时间']) : null;
 
       return entity;
     });

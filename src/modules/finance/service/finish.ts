@@ -5,7 +5,7 @@ import { FinanceCostEntity } from '../entity/cost';
 import { Provide } from '@midwayjs/decorator';
 import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Repository, FindOptionsWhere, Like ,Between} from 'typeorm';
+import { Repository, FindOptionsWhere, Like, Between, In, LessThanOrEqual } from 'typeorm';
 
 /**
  * 完成表服务
@@ -72,66 +72,91 @@ export class FinanceFinishService extends BaseService {
   }
 
   /**
-     * Generate data for finance_finish table based on gen_data_time
-     * @param genDataTime - The date for which to generate data
-     * @returns A message indicating the result
-     */
+   * 生成完成表
+   * @param genDataTime 
+   * @returns 
+   */
   async generateData(genDataTime: Date): Promise<string> {
-    // Normalize the date to start and end of day for range queries
+    // 规范化日期为当天的开始和结束时间
     const startOfDay = new Date(genDataTime);
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date(startOfDay);
     endOfDay.setDate(endOfDay.getDate() + 1);
 
-    // Step 1: Check if finance_finish has data for this date
+    // Step 1: 检查 finance_finish 表是否已有该日期的数据
     const finishCount = await this.financeFinishModel.count({
-      where: {
-        gen_data_time: Between(startOfDay, endOfDay),
-      },
+      where: { gen_data_time: Between(startOfDay, endOfDay) },
     });
     if (finishCount > 0) {
       return '此数据日期已经生成过';
     }
 
-    // Step 2: Check if finance_orders has data for this date
+    // Step 2: 检查 finance_orders 表是否已有该日期的数据
     const ordersCount = await this.financeOrdersModel.count({
-      where: {
-        gen_data_time: Between(startOfDay, endOfDay),
-      },
+      where: { gen_data_time: Between(startOfDay, endOfDay) },
     });
     if (ordersCount === 0) {
       return '订单表在该数据日期没有数据';
     }
 
-    // Step 3: Check if finance_erp_orders has data for this date
+    // Step 3: 检查 finance_erp_orders 表是否已有该日期的数据
     const erpOrdersCount = await this.financeErpOrdersModel.count({
-      where: {
-        gen_data_time: Between(startOfDay, endOfDay),
-      },
+      where: { gen_data_time: Between(startOfDay, endOfDay) },
     });
     if (erpOrdersCount === 0) {
       return 'ERP订单表在该数据日期没有数据';
     }
 
-    // Step 4: Check if finance_cost has data for this date
-    const costCount = await this.financeCostModel.count({
-      where: {
-        gen_data_time: Between(startOfDay, endOfDay),
-      },
-    });
-    if (costCount === 0) {
-      return '成本表在该数据日期没有数据';
+    // Step 4: 检查 finance_cost 表是否存在任何数据
+    const totalCostCount = await this.financeCostModel.count();
+    if (totalCostCount === 0) {
+      return '成本表没有数据';
     }
 
-    // Step 5 & 6: Generate data for finance_finish
-    // Fetch all orders for the given date
+    // 确定成本数据的 gen_data_time
+    let costDataTime: Date;
+    // 优先检查指定日期的成本数据
+    const costCount = await this.financeCostModel.count({
+      where: { gen_data_time: Between(startOfDay, endOfDay) },
+    });
+    if (costCount > 0) {
+      costDataTime = startOfDay; // 使用指定日期
+    } else {
+      // 如果指定日期无数据，查找最新的 gen_data_time
+      const latestCost = await this.financeCostModel.findOne({
+        order: { gen_data_time: 'DESC' },
+      });
+      if (!latestCost) {
+        return '成本表没有数据';
+      }
+      costDataTime = latestCost.gen_data_time;
+    }
+
+    // 获取订单数据
     const orders = await this.financeOrdersModel.find({
+      where: { gen_data_time: Between(startOfDay, endOfDay) },
+    });
+
+    // 获取 ERP 订单数据
+    const erpOrders = await this.financeErpOrdersModel.find({
       where: {
         gen_data_time: Between(startOfDay, endOfDay),
+        order_number: In(orders.map(order => order.sub_order_number)),
       },
     });
 
-    // Group orders by main_order_number to calculate average shipping fee
+    // 计算每个主订单的邮资费用
+    const shippingFeeByMainOrder = erpOrders.reduce((acc, erpOrder) => {
+      const mainOrder = orders.find(o => o.sub_order_number === erpOrder.order_number)?.main_order_number;
+      if (mainOrder) {
+        acc[mainOrder] = (acc[mainOrder] || 0) + (erpOrder.shipping_fee || 0);
+      } else {
+        console.warn(`未找到匹配的主订单: ERP order_number=${erpOrder.order_number}`);
+      }
+      return acc;
+    }, {} as Record<string, number>);
+
+    // 按主订单分组
     const mainOrderGroups = orders.reduce((acc, order) => {
       const mainOrder = order.main_order_number;
       if (!acc[mainOrder]) {
@@ -143,17 +168,17 @@ export class FinanceFinishService extends BaseService {
 
     const finishEntities: FinanceFinishEntity[] = [];
 
+    // 遍历主订单和子订单，生成完成表数据
     for (const mainOrder in mainOrderGroups) {
       const subOrders = mainOrderGroups[mainOrder];
       const numSubOrders = subOrders.length;
-      // Assume shipping_fee is the total for the main order, same for all sub-orders
-      const totalShippingFee = subOrders[0].shipping_fee || 0;
+      const totalShippingFee = shippingFeeByMainOrder[mainOrder] || 0;
       const avgShippingFee = numSubOrders > 0 ? Number((totalShippingFee / numSubOrders).toFixed(2)) : 0;
 
       for (const order of subOrders) {
         const entity = new FinanceFinishEntity();
 
-        // Direct field mappings from finance_orders
+        // 直接映射字段
         entity.main_order_number = order.main_order_number;
         entity.sub_order_number = order.sub_order_number;
         entity.selected_product = order.selected_goods;
@@ -218,52 +243,74 @@ export class FinanceFinishService extends BaseService {
         entity.logistics_imei_code_1 = order.logistics_imei_code1;
         entity.logistics_imei_code_2 = order.logistics_imei_code2;
 
-        // Step 7: Calculate fields
-        // Unit cost: Extract number before '包' from merchant_code
+        // 计算字段
+        // 单位成本：从 merchant_code 提取数字
         const codeParts = order.merchant_code.split('-');
         const lastPart = codeParts[codeParts.length - 1].replace('包', '');
         entity.unit_cost = parseInt(lastPart, 10) || 0;
 
-        // Order quantity: product_quantity * unit_cost
+        // 订单数量：product_quantity * unit_cost
         entity.order_quantity = order.product_quantity * entity.unit_cost;
 
-        // Fetch cost data
-        const cost = await this.financeCostModel.findOne({
-          where: {
-            product_number: order.product_id,
-            gen_data_time: Between(startOfDay, endOfDay),
-          },
-        });
+        // 查询成本数据，使用确定的 costDataTime
+        try {
+          const cost = await this.financeCostModel.findOne({
+            where: {
+              product_number: order.product_id,
+              gen_data_time: costDataTime,
+            },
+          });
 
-        if (cost) {
-          // Total cost: cost_price * order_quantity
-          entity.total_cost = cost.cost_price * entity.order_quantity;
-          // Weight: unit_weight * order_quantity
-          entity.weight = cost.unit_weight * entity.order_quantity;
-        } else {
+          if (cost) {
+            // 总成本：cost_price * order_quantity
+            entity.total_cost = Number((cost.cost_price * entity.order_quantity).toFixed(2));
+            // 重量：unit_weight * order_quantity
+            entity.weight = Number((cost.unit_weight * entity.order_quantity).toFixed(2));
+          } else {
+            console.warn(`成本数据未找到: product_id=${order.product_id}, gen_data_time=${costDataTime}`);
+            entity.total_cost = 0;
+            entity.weight = 0;
+          }
+        } catch (error) {
+          console.error(`查询成本数据失败: product_id=${order.product_id}, 错误: ${error.message}`);
           entity.total_cost = 0;
           entity.weight = 0;
         }
 
-        // Platform service fee
+        // 平台服务费
         const rate = order.traffic_format === '商品卡' ? 0.006 : 0.025;
-        entity.platform_service_fee =
-          rate *
-          (order.order_payable_amount +
-            (order.platform_actual_discount || 0) +
-            (order.influencer_actual_discount || 0));
+        entity.platform_service_fee = Number(
+          (
+            rate *
+            (order.order_payable_amount +
+              (order.platform_actual_discount || 0) +
+              (order.influencer_actual_discount || 0))
+          ).toFixed(2)
+        );
 
-        // Set additional fields
+        // 额外字段
         entity.gen_data_time = genDataTime;
-        entity.province_2 = order.province; // Assuming province_2 maps to province
-        entity.warehouse_2 = order.warehouse_name; // Assuming warehouse_2 maps to warehouse_name
+        entity.province_2 = order.province;
+        entity.warehouse_2 = order.warehouse_name;
+        entity.express_fee = entity.shipping_fee;
+        entity.operation_fee = 0; // 占位，需确认业务逻辑
+        entity.status = order.order_status;
+        entity.erp_cost = entity.total_cost;
+        entity.erp_express_fee = entity.shipping_fee;
+        entity.transaction_time = order.payment_completion_time;
+        entity.is_platform_warehouse_transfer = order.is_platform_warehouse_auto_transfer;
 
         finishEntities.push(entity);
       }
     }
 
-    // Save all generated entities
-    await this.financeFinishModel.save(finishEntities);
+    // 保存数据
+    try {
+      await this.financeFinishModel.save(finishEntities, { chunk: 1000 });
+    } catch (error) {
+      console.error(`保存数据失败: ${error.message}`);
+      return '数据生成失败，请检查服务器日志';
+    }
 
     return '数据生成成功';
   }

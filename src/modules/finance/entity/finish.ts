@@ -178,8 +178,8 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '预计送达时间', nullable: true, type: 'datetime' })
   estimated_delivery_time: Date;
 
-  @Column({ comment: '是否平台仓自流转', nullable: true, type: 'boolean' })
-  is_platform_warehouse_transfer: boolean;
+  @Column({ comment: '是否平台仓自流转', nullable: true, length: 100 })
+  is_platform_warehouse_transfer: string;
 
   @Column({ comment: '车型', nullable: true, length: 50 })
   vehicle_type: string;

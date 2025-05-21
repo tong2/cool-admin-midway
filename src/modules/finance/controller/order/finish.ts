@@ -47,4 +47,12 @@ export class FinanceFinishController extends BaseController {
       return this.fail('查询失败: ' + error.message);
     }
   }
+
+  @Post('/generate')
+  async generate(@Body() body: { gen_data_time: Date }) {
+    const genDataTime = new Date(body.gen_data_time);
+    const result = await this.financeFinishService.generateData(genDataTime);
+    return this.ok(result);
+  }
+  
 }

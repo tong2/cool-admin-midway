@@ -46,8 +46,8 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '优惠总金额', nullable: true, type: 'decimal', precision: 10, scale: 4 })
   total_discount_amount: number;
 
-  @Column({ comment: '平台优惠', nullable: true, type: 'decimal', precision: 10, scale: 4 })
-  platform_discount: number;
+  @Column({ comment: '平台优惠', nullable: true, length: 100 })
+  platform_discount: string;
 
   @Column({ comment: '商家优惠', nullable: true, type: 'decimal', precision: 10, scale: 4 })
   merchant_discount: number;

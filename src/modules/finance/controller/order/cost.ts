@@ -4,7 +4,7 @@ import { FinanceCostService } from '../../service/cost';
 import { FinanceCostQueryDTO } from '../../dto/cost';
 import { Body, Inject, Post, Get, Provide, Files, Query } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull, Not } from 'typeorm';
 import { Context } from 'vm';
 import { Validate } from '@midwayjs/validate';
 import * as ExcelJS from 'exceljs';
@@ -185,31 +185,34 @@ export class FinanceCostController extends BaseController {
   @Get('/latest-data-time', { summary: 'Get the latest gen_data_time from FinanceCostEntity' })
   async getLatestDataTime() {
     try {
-      const result = await this.financeCostModel
-        .createQueryBuilder('financeCost')
-        .select('MAX(financeCost.gen_data_time)', 'latestDataTime')
-        .getRawOne();
+      // 查询 finance_cost 表中最新的 gen_data_time
+      const latestCost = await this.financeCostModel.findOne({
+        select: ['gen_data_time'],
+        where: { gen_data_time: Not(IsNull()) }, // 排除 NULL 值
+        order: { gen_data_time: 'DESC' },
+      });
 
-      if (!result || !result.latestDataTime) {
+      // 检查是否找到记录
+      if (!latestCost || !latestCost.gen_data_time) {
+        console.warn(
+          !latestCost
+            ? 'finance_cost 表为空，无任何记录'
+            : 'finance_cost 表最新记录的 gen_data_time 为 NULL'
+        );
         return this.ok({
           code: 1000,
           data: null,
-          message: 'No data available',
+          message: !latestCost ? '成本表为空，无数据' : '成本表最新 gen_data_time 为空',
         });
       }
-
-      // Ensure the date is returned as YYYY-MM-DD string
-      const latestDate = result.latestDataTime instanceof Date
-        ? result.latestDataTime.toISOString().split('T')[0]
-        : result.latestDataTime;
-
       return this.ok({
         code: 1000,
-        data: latestDate,
+        data: latestCost.gen_data_time,
         message: 'Success',
       });
     } catch (error) {
-      return this.fail('Failed to retrieve latest data time' + error.message);
+      console.error(`查询最新 gen_data_time 失败: ${error.message}`);
+      return this.fail('查询最新数据时间失败: ${error.message}');
     }
   }
 }

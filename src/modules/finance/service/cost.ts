@@ -40,7 +40,7 @@ export class FinanceCostService extends BaseService {
       where.product_name = Like(`%${product_name}%`);
     }
     if (keyWord) {
-      where.product_name = Like(`%${keyWord}%`);
+      where.merchant_code = Like(`%${keyWord}%`);
     }
 
     // Other dynamic conditions (exact match)

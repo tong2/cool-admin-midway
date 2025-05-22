@@ -52,7 +52,7 @@ export class FinanceFinishService extends BaseService {
       where.selected_product = Like(`%${selected_product}%`);
     }
     if (keyWord) {
-      where.selected_product = Like(`%${keyWord}%`);
+      where.sub_order_number = Like(`%${keyWord}%`);
     }
 
     // Other dynamic conditions (exact match)

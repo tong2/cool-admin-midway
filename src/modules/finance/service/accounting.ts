@@ -42,7 +42,7 @@ export class FinanceAccountingService extends BaseService {
       where.product_id = Like(`%${product_id}%`);
     }
     if (keyWord) {
-      where.product_id = Like(`%${keyWord}%`);
+      where.sub_order_no = Like(`%${keyWord}%`);
     }
 
     // 其他动态条件（精确匹配）

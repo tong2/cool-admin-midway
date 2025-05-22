@@ -135,14 +135,14 @@ export class FinanceFinishService extends BaseService {
     const erpOrders = await this.financeErpOrdersModel.find({
       where: {
         gen_data_time: Between(startOfDay, endOfDay),
-        order_number: In(orders.map(order => order.sub_order_number)),
+        original_order_no: In(orders.map(order => order.sub_order_number)),
       },
     });
-
     const shippingFeeByMainOrder = erpOrders.reduce((acc, erpOrder) => {
       const mainOrder = orders.find(o => o.sub_order_number === erpOrder.original_order_no)?.main_order_number;
       if (mainOrder) {
-        acc[mainOrder] = (acc[mainOrder] || 0) + (erpOrder.shipping_fee || 0);
+        console.log('erpOrder.shipping_estimated_cost:'+erpOrder.shipping_estimated_cost);
+        acc[mainOrder] = (acc[mainOrder] || 0) + (erpOrder.shipping_estimated_cost || 0);
       }
       return acc;
     }, {} as Record<string, number>);

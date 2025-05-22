@@ -7,8 +7,7 @@ import { Repository, FindOptionsWhere, Like } from 'typeorm';
 
 const safe = (v: any, fallback: any = '') => v ?? fallback;
 const safeNum = (v: any, fallback = 0) => isNaN(Number(v)) ? fallback : Number(v);
-const safeNum2= (v: string | number | null | undefined, fallback = 0): number =>
-  isNaN(Number(v)) ? fallback : Number(Number(v).toFixed(2));
+
 /**
  * 核算表服务
  */
@@ -116,11 +115,10 @@ export class FinanceAccountingService extends BaseService {
         const operationFee = safeNum(record.operation_fee);
 
         // Calculate derived fields with 2-decimal precision
-        const actualSales = safeNum2(orderPayableAmount + actualPlatformSubsidy + influencerDiscountAmount);
-        const platformSubsidyFeeBase = safeNum2(actualPlatformSubsidy * 0.05); // Intermediate calculation
-        const platformSubsidyFee = safeNum2(actualPlatformSubsidy * 0.02); // Final platform_subsidy_fee (2%)
-        const profit = safeNum2(actualSales - platformSubsidyFeeBase - platformServiceFee - influencerCommission - groupLeaderServiceFee - cost - shippingFee);
-        const grossMargin = actualSales !== 0 ? safeNum2(profit / actualSales) : 0;
+        const actualSales = Number((safeNum(orderPayableAmount) + safeNum(actualPlatformSubsidy) + safeNum(influencerDiscountAmount)).toFixed(2));
+        const platformSubsidyFee = Number((safeNum(actualPlatformSubsidy) * 0.02).toFixed(2));
+        const profit = Number((safeNum(actualSales) - safeNum(platformSubsidyFee) - safeNum(platformServiceFee) - safeNum(influencerCommission) - safeNum(groupLeaderServiceFee) - safeNum(cost) - safeNum(shippingFee)).toFixed(2));
+        const grossMargin = actualSales !== 0 ? Number((safeNum(profit) / safeNum(actualSales)).toFixed(2)) : 0;
 
         // Apply negative signs to specified fields
         return {
@@ -142,8 +140,8 @@ export class FinanceAccountingService extends BaseService {
           cost: negateIfNonZero(cost),
           shipping_fee: negateIfNonZero(shippingFee),
           operation_fee: negateIfNonZero(operationFee),
-          profit: negateIfNonZero(profit),
-          gross_margin: negateIfNonZero(grossMargin),
+          profit: profit,
+          gross_margin: grossMargin,
           gen_data_time: startDate,
         };
       });

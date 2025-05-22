@@ -230,6 +230,14 @@ export class FinanceGroupLeaderServiceFeeService extends BaseService {
       return entity;
     });
 
+    // ---
+    // Check for missing '数据时间' before saving
+    // ---
+    const missingDateEntity = entities.find(entity => entity.gen_data_time === null);
+    if (missingDateEntity) {
+      return { success: false, message: '数据时间必填' };
+    }
+
     // Batch save
     await this.financeGroupLeaderServiceFeeModel.save(entities);
     return { success: true, count: entities.length };

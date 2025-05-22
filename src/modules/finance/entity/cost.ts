@@ -10,9 +10,6 @@ export class FinanceCostEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: '主键ID' })
   id: number;
 
-  @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
-  gen_data_time: Date;
-
   @Column({ comment: '商家编码', nullable: true, length: 50 })
   merchant_code: string;
 
@@ -39,5 +36,9 @@ export class FinanceCostEntity extends BaseEntity {
 
   @Column({ comment: '成本价', nullable: true, type: 'decimal', precision: 10, scale: 4 })
   cost_price: number;
+
+
+  @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
+  gen_data_time: Date;
 
 }

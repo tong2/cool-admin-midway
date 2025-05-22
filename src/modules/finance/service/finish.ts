@@ -165,6 +165,11 @@ export class FinanceFinishService extends BaseService {
       for (const order of subOrders) {
         const entity = new FinanceFinishEntity();
 
+        // Find the corresponding erpOrder for the current order
+        const matchingErpOrder = erpOrders.find(
+          erpOrder => erpOrder.original_order_no === order.sub_order_number
+        );
+
         const safe = (v: any, fallback: any = '') => v ?? fallback;
         const safeNum = (v: any, fallback = 0) => isNaN(Number(v)) ? fallback : Number(v);
 
@@ -237,7 +242,7 @@ export class FinanceFinishService extends BaseService {
           transaction_time: order.payment_completion_time,
           gen_data_time: genDataTime,
           province_2: safe(order.province),
-          warehouse_2: safe(order.warehouse_name),
+          warehouse_2: safe(matchingErpOrder?.warehouse_name), // Assign warehouse_name from erpOrders
           express_fee: avgShippingFee,
           operation_fee: 0,
           status: safe(order.order_status),

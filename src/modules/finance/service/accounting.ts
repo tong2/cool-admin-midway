@@ -118,7 +118,7 @@ export class FinanceAccountingService extends BaseService {
         // Calculate derived fields with 2-decimal precision
         const actualSales = safeNum2(orderPayableAmount + actualPlatformSubsidy + influencerDiscountAmount);
         const platformSubsidyFeeBase = safeNum2(actualPlatformSubsidy * 0.05); // Intermediate calculation
-        const platformSubsidyFee = safeNum2(platformSubsidyFeeBase * 0.02); // Final platform_subsidy_fee (2%)
+        const platformSubsidyFee = safeNum2(actualPlatformSubsidy * 0.02); // Final platform_subsidy_fee (2%)
         const profit = safeNum2(actualSales - platformSubsidyFeeBase - platformServiceFee - influencerCommission - groupLeaderServiceFee - cost - shippingFee);
         const grossMargin = actualSales !== 0 ? safeNum2(profit / actualSales) : 0;
 
@@ -127,7 +127,7 @@ export class FinanceAccountingService extends BaseService {
           sub_order_no: safe(record.sub_order_number),
           product_id: safe(record.product_id),
           merchant_code: safe(record.merchant_code),
-          warehouse: safe(record.warehouse_name),
+          warehouse: safe(record.warehouse_2),
           status: safe(record.status),
           trade_date: record.transaction_time ?? startDate,
           order_quantity: safeNum(record.product_quantity),

@@ -94,6 +94,12 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '订单提交时间', nullable: true, type: 'datetime' })
   order_submission_time: Date;
 
+  @Column({ comment: '旗帜颜色', nullable: true, length: 20 })
+  flag_color: string;
+
+  @Column({ comment: '商家备注', nullable: true, type: 'text' })
+  merchant_remark: string;
+
   @Column({ comment: '支付完成时间', nullable: true, type: 'datetime' })
   payment_completion_time: Date;
 

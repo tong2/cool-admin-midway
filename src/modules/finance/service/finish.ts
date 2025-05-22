@@ -188,6 +188,8 @@ export class FinanceFinishService extends BaseService {
           district: safe(order.district),
           street: safe(order.street),
           detailed_address: safe(order.detailed_address),
+          flag_color: safe(order.flag_color),
+          merchant_remark: safe(order.merchant_remark),
           recipient_name: safe(order.recipient_name),
           recipient_phone: safe(order.recipient_phone_number),
           payment_method: safe(order.payment_method),

@@ -14,7 +14,7 @@ import { existsSync } from 'fs';
  * 成本表控制器
  */
 @CoolController({
-  api: ['add', 'delete', 'update', 'info', 'list', 'page'],
+  api: ['add', 'delete', 'info', 'list', 'page'],
   entity: FinanceCostEntity,
   service: FinanceCostService,
 })

@@ -7,6 +7,18 @@ import { Repository, FindOptionsWhere, Like } from 'typeorm';
 
 const safe = (v: any, fallback: any = '') => v ?? fallback;
 const safeNum = (v: any, fallback = 0) => isNaN(Number(v)) ? fallback : Number(v);
+const formatDate = (date: Date | null | undefined): string => {
+  if (!date) return '';
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 
 /**
  * 核算表服务
@@ -155,5 +167,73 @@ export class FinanceAccountingService extends BaseService {
       console.error('Error generating data:', error);
       throw new Error(`Failed to generate data: ${error.message}`);
     }
+  }
+
+  /**
+  * Export accounting data
+  */
+  async export(query: any) {
+    const where: FindOptionsWhere<FinanceAccountingEntity> = {};
+
+    // Apply same conditions as list method
+    const { sub_order_no, product_id, keyWord, ...otherParams } = query;
+
+    if (sub_order_no) {
+      where.sub_order_no = Like(`%${sub_order_no}%`);
+    }
+    if (product_id) {
+      where.product_id = Like(`%${product_id}%`);
+    }
+    if (keyWord) {
+      where.sub_order_no = Like(`%${keyWord}%`);
+    }
+
+    Object.keys(otherParams).forEach(key => {
+      if (otherParams[key] && FinanceAccountingEntity.prototype.hasOwnProperty(key)) {
+        where[key] = otherParams[key];
+      }
+    });
+
+    const data = await this.financeAccountingModel.find({ where });
+
+    // Define export headers with Chinese labels
+    const headers = [
+      { key: 'gen_data_time', label: '数据时间', isDate: true },
+      { key: 'sub_order_no', label: '子订单编号' },
+      { key: 'status', label: '状态' },
+      { key: 'warehouse', label: '仓库' },
+      { key: 'trade_date', label: '交易日期', isDate: true },
+      { key: 'product_id', label: '商品ID' },
+      { key: 'merchant_code', label: '商家编码' },
+      { key: 'order_quantity', label: '订单数量' },
+      { key: 'order_payable_amount', label: '订单应付金额' },
+      { key: 'actual_platform_subsidy', label: '实际平台补贴' },
+      { key: 'influencer_discount_amount', label: '达人实际承担优惠金额' },
+      { key: 'actual_sales', label: '实销' },
+      { key: 'platform_subsidy_fee', label: '平台补贴扣费（2%）' },
+      { key: 'platform_service_fee', label: '平台服务费' },
+      { key: 'influencer_commission', label: '达人佣金' },
+      { key: 'group_leader_service_fee', label: '团长服务费' },
+      { key: 'cost', label: '成本' },
+      { key: 'shipping_fee', label: '快递费' },
+      { key: 'operation_fee', label: '操作费' },
+      { key: 'profit', label: '利润' },
+      { key: 'gross_margin', label: '毛利率' },
+    ];
+
+    // Format data for export
+    const exportData = data.map(item => {
+      const row: { [key: string]: any } = {};
+      headers.forEach(header => {
+        if (header.isDate) {
+          row[header.key] = formatDate(item[header.key]);
+        } else {
+          row[header.key] = item[header.key] ?? '';
+        }
+      });
+      return row;
+    });
+
+    return { headers, data: exportData };
   }
 }

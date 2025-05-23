@@ -4,6 +4,19 @@ import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Like } from 'typeorm';
 
+const formatDate = (date: Date | null | undefined): string => {
+  if (!date) return '';
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
 /**
  * 成本表服务
  */
@@ -94,7 +107,7 @@ export class FinanceCostService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'gen_data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' , isDate: true },
       { key: 'merchant_code', label: '商家编码' },
       { key: 'product_number', label: '货品编号' },
       { key: 'product_name', label: '货品名称' },
@@ -110,7 +123,11 @@ export class FinanceCostService extends BaseService {
     const exportData = data.map(item => {
       const row: { [key: string]: any } = {};
       headers.forEach(header => {
-        row[header.key] = item[header.key] ?? '';
+        if (header.isDate) {
+          row[header.key] = formatDate(item[header.key]);
+        } else {
+          row[header.key] = item[header.key] ?? '';
+        }
       });
       return row;
     });

@@ -4,6 +4,19 @@ import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Between, Like } from 'typeorm';
 
+const formatDate = (date: Date | null | undefined): string => {
+  if (!date) return '';
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
 /**
  * ERP订单服务
  */
@@ -104,7 +117,7 @@ export class FinanceErpOrdersService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'gen_data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' , isDate: true },
       { key: 'order_number', label: '订单编号' },
       { key: 'platform_type', label: '平台类型' },
       { key: 'shop_name', label: '店铺名称' },
@@ -123,8 +136,8 @@ export class FinanceErpOrdersService extends BaseService {
       { key: 'distributor_name', label: '分销商名称' },
       { key: 'distributor_code', label: '分销商编号' },
       { key: 'distribution_original_order_no', label: '分销原始单号' },
-      { key: 'order_time', label: '下单时间' },
-      { key: 'payment_time', label: '付款时间' },
+      { key: 'order_time', label: '下单时间' , isDate: true },
+      { key: 'payment_time', label: '付款时间' , isDate: true },
       { key: 'shipping_countdown', label: '发货倒计时' },
       { key: 'buyer_payment_account', label: '买家付款账号' },
       { key: 'customer_nickname', label: '客户网名' },
@@ -136,7 +149,7 @@ export class FinanceErpOrdersService extends BaseService {
       { key: 'postcode', label: '邮编' },
       { key: 'area', label: '区域' },
       { key: 'big_pen', label: '大头笔' },
-      { key: 'dispatch_time', label: '派送时间' },
+      { key: 'dispatch_time', label: '派送时间' , isDate: true },
       { key: 'logistics_company', label: '物流公司' },
       { key: 'logistics_number', label: '物流单号' },
       { key: 'buyer_message', label: '买家留言' },
@@ -173,10 +186,10 @@ export class FinanceErpOrdersService extends BaseService {
       { key: 'product_merchant_code', label: '货品商家编码' },
       { key: 'original_product_quantity', label: '原始货品数量' },
       { key: 'original_product_variety_count', label: '原始货品种类数' },
-      { key: 'submission_time', label: '递交时间' },
+      { key: 'submission_time', label: '递交时间' , isDate: true },
       { key: 'currency', label: '币种' },
       { key: 'online_package_split_count', label: '线上包裹拆分数' },
-      { key: 'activation_time', label: '激活时间' },
+      { key: 'activation_time', label: '激活时间' , isDate: true },
       { key: 'invoice_issued', label: '已开具发票' },
       { key: 'volume', label: '体积' },
       { key: 'order_tags', label: '订单标签' },
@@ -184,7 +197,7 @@ export class FinanceErpOrdersService extends BaseService {
       { key: 'note', label: '便签' },
       { key: 'id_number', label: '证件号码' },
       { key: 'buyer_actual_payment', label: '买家实付' },
-      { key: 'latest_delivery_time', label: '最晚送达时间' },
+      { key: 'latest_delivery_time', label: '最晚送达时间' , isDate: true},
       { key: 'platform_tags', label: '平台标签' },
     ];
 
@@ -192,7 +205,11 @@ export class FinanceErpOrdersService extends BaseService {
     const exportData = data.map(item => {
       const row: { [key: string]: any } = {};
       headers.forEach(header => {
-        row[header.key] = item[header.key] instanceof Date ? item[header.key].toISOString() : item[header.key] ?? '';
+        if (header.isDate) {
+          row[header.key] = formatDate(item[header.key]);
+        } else {
+          row[header.key] = item[header.key] ?? '';
+        }
       });
       return row;
     });

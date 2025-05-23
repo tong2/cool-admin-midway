@@ -4,6 +4,19 @@ import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Between, Like } from 'typeorm';
 
+const formatDate = (date: Date | null | undefined): string => {
+  if (!date) return '';
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
 /**
  * 达人佣金服务
  */
@@ -106,7 +119,7 @@ export class FinanceTalentCommissionService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'gen_data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' , isDate: true},
       { key: 'order_id', label: '订单id' },
       { key: 'product_id', label: '商品id' },
       { key: 'product_name', label: '商品名称' },
@@ -119,11 +132,11 @@ export class FinanceTalentCommissionService extends BaseService {
       { key: 'actual_commission', label: '实际佣金支出' },
       { key: 'order_status', label: '订单状态' },
       { key: 'unsettled_reason', label: '超时未结算原因' },
-      { key: 'payment_time', label: '付款时间' },
-      { key: 'receipt_time', label: '收货时间' },
-      { key: 'order_settlement_time', label: '订单结算时间' },
+      { key: 'payment_time', label: '付款时间' , isDate: true},
+      { key: 'receipt_time', label: '收货时间' , isDate: true},
+      { key: 'order_settlement_time', label: '订单结算时间' , isDate: true},
       { key: 'product_source', label: '商品来源' },
-      { key: 'final_payment_time', label: '尾款支付时间' },
+      { key: 'final_payment_time', label: '尾款支付时间', isDate: true },
       { key: 'deposit_amount', label: '定金金额' },
       { key: 'shop_id', label: '店铺id' },
       { key: 'shop_name', label: '店铺名称' },
@@ -160,7 +173,11 @@ export class FinanceTalentCommissionService extends BaseService {
     const exportData = data.map(item => {
       const row: { [key: string]: any } = {};
       headers.forEach(header => {
-        row[header.key] = item[header.key] instanceof Date ? item[header.key].toISOString() : item[header.key] ?? '';
+        if (header.isDate) {
+          row[header.key] = formatDate(item[header.key]);
+        } else {
+          row[header.key] = item[header.key] ?? '';
+        }
       });
       return row;
     });

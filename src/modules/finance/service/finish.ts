@@ -7,6 +7,18 @@ import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Like, Between, In, LessThanOrEqual } from 'typeorm';
 
+const formatDate = (date: Date | null | undefined): string => {
+  if (!date) return '';
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 /**
  * 完成表服务
  */
@@ -141,7 +153,7 @@ export class FinanceFinishService extends BaseService {
     const shippingFeeByMainOrder = erpOrders.reduce((acc, erpOrder) => {
       const mainOrder = orders.find(o => o.sub_order_number === erpOrder.original_order_no)?.main_order_number;
       if (mainOrder) {
-        console.log('erpOrder.shipping_estimated_cost:'+erpOrder.shipping_estimated_cost);
+        console.log('erpOrder.shipping_estimated_cost:' + erpOrder.shipping_estimated_cost);
         acc[mainOrder] = (acc[mainOrder] || 0) + (erpOrder.shipping_estimated_cost || 0);
       }
       return acc;
@@ -300,6 +312,137 @@ export class FinanceFinishService extends BaseService {
     }
 
     return '数据生成成功';
+  }
+
+  /**
+   * Export finish data
+   */
+  async export(query: any) {
+    const where: FindOptionsWhere<FinanceFinishEntity> = {};
+
+    // Apply same conditions as list method
+    const { main_order_number, sub_order_number, selected_product, keyWord, ...otherParams } = query;
+
+    if (main_order_number) {
+      where.main_order_number = Like(`%${main_order_number}%`);
+    }
+    if (sub_order_number) {
+      where.sub_order_number = Like(`%${sub_order_number}%`);
+    }
+    if (selected_product) {
+      where.selected_product = Like(`%${selected_product}%`);
+    }
+    if (keyWord) {
+      where.sub_order_number = Like(`%${keyWord}%`);
+    }
+
+    Object.keys(otherParams).forEach(key => {
+      if (otherParams[key] && FinanceFinishEntity.prototype.hasOwnProperty(key)) {
+        where[key] = otherParams[key];
+      }
+    });
+
+    const data = await this.financeFinishModel.find({ where });
+
+    // Define export headers with Chinese labels
+    const headers = [
+      { key: 'gen_data_time', label: '数据时间', isDate: true },
+      { key: 'main_order_number', label: '主订单编号' },
+      { key: 'sub_order_number', label: '子订单编号' },
+      { key: 'selected_product', label: '选购商品' },
+      { key: 'product_specification', label: '商品规格' },
+      { key: 'product_quantity', label: '商品数量' },
+      { key: 'product_id', label: '商品ID' },
+      { key: 'merchant_code', label: '商家编码' },
+      { key: 'product_unit_price', label: '商品单价' },
+      { key: 'order_payable_amount', label: '订单应付金额' },
+      { key: 'shipping_fee', label: '运费' },
+      { key: 'total_discount_amount', label: '优惠总金额' },
+      { key: 'platform_discount', label: '平台优惠' },
+      { key: 'merchant_discount', label: '商家优惠' },
+      { key: 'talent_discount', label: '达人优惠' },
+      { key: 'merchant_price_adjustment', label: '商家改价' },
+      { key: 'payment_discount', label: '支付优惠' },
+      { key: 'red_packet_deduction', label: '红包抵扣' },
+      { key: 'payment_method', label: '支付方式' },
+      { key: 'transaction_fee', label: '手续费' },
+      { key: 'recipient_name', label: '收件人' },
+      { key: 'recipient_phone', label: '收件人手机号' },
+      { key: 'province', label: '省' },
+      { key: 'city', label: '市' },
+      { key: 'district', label: '区' },
+      { key: 'street', label: '街道' },
+      { key: 'detailed_address', label: '详细地址' },
+      { key: 'order_submission_time', label: '订单提交时间', isDate: true },
+      { key: 'merchant_remark', label: '商家备注' },
+      { key: 'payment_completion_time', label: '支付完成时间', isDate: true },
+      { key: 'app_channel', label: 'APP渠道' },
+      { key: 'traffic_source', label: '流量来源' },
+      { key: 'order_status', label: '订单状态' },
+      { key: 'promised_shipping_time', label: '承诺发货时间', isDate: true },
+      { key: 'order_type', label: '订单类型' },
+      { key: 'talent_id', label: '达人ID' },
+      { key: 'talent_nickname', label: '达人昵称' },
+      { key: 'store_id', label: '所属门店ID' },
+      { key: 'after_sales_status', label: '售后状态' },
+      { key: 'cancellation_reason', label: '取消原因' },
+      { key: 'scheduled_shipping_time', label: '预约发货时间', isDate: true },
+      { key: 'warehouse_id', label: '仓库ID' },
+      { key: 'warehouse_name', label: '仓库名称' },
+      { key: 'is_secure_purchase', label: '是否安心购' },
+      { key: 'ad_channel', label: '广告渠道' },
+      { key: 'traffic_type', label: '流量类型' },
+      { key: 'traffic_format', label: '流量体裁' },
+      { key: 'traffic_channel', label: '流量渠道' },
+      { key: 'shipping_entity', label: '发货主体' },
+      { key: 'shipping_entity_details', label: '发货主体明细' },
+      { key: 'shipping_time', label: '发货时间', isDate: true },
+      { key: 'price_reduction_discount', label: '降价类优惠' },
+      { key: 'platform_actual_discount', label: '平台实际承担优惠金额' },
+      { key: 'merchant_actual_discount', label: '商家实际承担优惠金额' },
+      { key: 'talent_actual_discount', label: '达人实际承担优惠金额' },
+      { key: 'estimated_delivery_time', label: '预计送达时间', isDate: true },
+      { key: 'is_platform_warehouse_transfer', label: '是否平台仓自流转' },
+      { key: 'vehicle_type', label: '车型' },
+      { key: 'product69_code', label: '商品69码' },
+      { key: 'shipping_sn_code', label: '发货SN码' },
+      { key: 'shipping_imei_code_1', label: '发货IMEI码1' },
+      { key: 'shipping_imei_code_2', label: '发货IMEI码2' },
+      { key: 'scheduled_delivery_time', label: '预约送达时间', isDate: true },
+      { key: 'suggested_shipping_start', label: '建议发货时间（起）', isDate: true },
+      { key: 'suggested_shipping_end', label: '建议发货时间（止）', isDate: true },
+      { key: 'logistics_sn_code', label: '物流SN码' },
+      { key: 'logistics_imei_code_1', label: '物流IMEI码1' },
+      { key: 'logistics_imei_code_2', label: '物流IMEI码2' },
+      { key: 'transaction_time', label: '交易时间', isDate: true },
+      { key: 'unit_cost', label: '单位成本' },
+      { key: 'order_quantity', label: '订单数量' },
+      { key: 'total_cost', label: '成本' },
+      { key: 'weight', label: '重量' },
+      { key: 'province_2', label: '省份' },
+      { key: 'express_fee', label: '快递费' },
+      { key: 'operation_fee', label: '操作费' },
+      { key: 'platform_service_fee', label: '平台服务费' },
+      { key: 'warehouse_2', label: '仓库' },
+      { key: 'status', label: '状态' },
+      { key: 'erp_cost', label: 'erp成本' },
+      { key: 'erp_express_fee', label: 'erp快递费' },
+    ];
+
+    // Format data for export
+    const exportData = data.map(item => {
+      const row: { [key: string]: any } = {};
+      headers.forEach(header => {
+        if (header.isDate) {
+          row[header.key] = formatDate(item[header.key]);
+        } else {
+          row[header.key] = item[header.key] ?? '';
+        }
+      });
+      return row;
+    });
+
+    return { headers, data: exportData };
   }
 
 

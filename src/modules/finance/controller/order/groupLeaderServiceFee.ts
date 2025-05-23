@@ -65,7 +65,9 @@ export class FinanceGroupLeaderServiceFeeEntityController extends BaseController
 
     // Set response headers
     this.ctx.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    this.ctx.set('Content-Disposition', 'attachment; filename=group-leader-service-fees.xlsx');
+    // Encode the filename to handle Chinese characters
+    const filename = encodeURIComponent('团长服务费表.xlsx');
+    this.ctx.set('Content-Disposition', `attachment; filename*=UTF-8''${filename}`);
 
     // Write to buffer and return
     const buffer = await workbook.xlsx.writeBuffer();

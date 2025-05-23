@@ -48,9 +48,11 @@ export class FinanceOrdersEntityController extends BaseController {
     // Add data
     worksheet.addRows(data);
 
-    // Set response headers
-    this.ctx.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    this.ctx.set('Content-Disposition', 'attachment; filename=finance-orders.xlsx');
+     // Set response headers
+     this.ctx.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+     // Encode the filename to handle Chinese characters
+     const filename = encodeURIComponent('订单表.xlsx');
+     this.ctx.set('Content-Disposition', `attachment; filename*=UTF-8''${filename}`);
 
     // Write to buffer and return
     const buffer = await workbook.xlsx.writeBuffer();

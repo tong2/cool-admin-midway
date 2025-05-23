@@ -4,6 +4,19 @@ import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Like } from 'typeorm';
 
+const formatDate = (date: Date | null | undefined): string => {
+  if (!date) return '';
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
 /**
  * 库存表服务
  */
@@ -95,7 +108,7 @@ export class FinanceStockService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'gen_data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' , isDate: true},
       { key: 'product_code', label: '商品编码' },
       { key: 'weight', label: '重量' },
       { key: 'purchase_price', label: '采购价' },
@@ -117,7 +130,11 @@ export class FinanceStockService extends BaseService {
     const exportData = data.map(item => {
       const row: { [key: string]: any } = {};
       headers.forEach(header => {
-        row[header.key] = item[header.key] ?? '';
+        if (header.isDate) {
+          row[header.key] = formatDate(item[header.key]);
+        } else {
+          row[header.key] = item[header.key] ?? '';
+        }
       });
       return row;
     });
@@ -192,7 +209,7 @@ export class FinanceStockService extends BaseService {
     if (missingDateEntity) {
       return { success: false, message: '数据时间必填' };
     }
-    
+
     // Batch save
     await this.financeStockModel.save(entities);
     return { success: true, count: entities.length };

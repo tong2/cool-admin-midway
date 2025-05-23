@@ -4,6 +4,19 @@ import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Between, Like } from 'typeorm';
 
+const formatDate = (date: Date | null | undefined): string => {
+  if (!date) return '';
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+
 /**
  * 订单示例
  */
@@ -174,7 +187,7 @@ export class FinanceOrdersService extends BaseService {
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'gen_data_time', label: '数据时间' },
+      { key: 'gen_data_time', label: '数据时间' , isDate: true},
       { key: 'main_order_number', label: '主订单编号' },
       { key: 'sub_order_number', label: '子订单编号' },
       { key: 'selected_goods', label: '所选商品' },
@@ -203,15 +216,15 @@ export class FinanceOrdersService extends BaseService {
       { key: 'detailed_address', label: '详细地址' },
       { key: 'is_address_modified', label: '地址是否修改' },
       { key: 'buyer_message', label: '买家留言' },
-      { key: 'order_submission_time', label: '订单提交时间' },
+      { key: 'order_submission_time', label: '订单提交时间', isDate: true },
       { key: 'flag_color', label: '标记颜色' },
       { key: 'merchant_remark', label: '商家备注' },
-      { key: 'order_completion_time', label: '订单完成时间' },
-      { key: 'payment_completion_time', label: '支付完成时间' },
+      { key: 'order_completion_time', label: '订单完成时间' , isDate: true},
+      { key: 'payment_completion_time', label: '支付完成时间', isDate: true },
       { key: 'app_channel', label: '应用渠道' },
       { key: 'traffic_source', label: '流量来源' },
       { key: 'order_status', label: '订单状态' },
-      { key: 'promised_delivery_time', label: '承诺配送时间' },
+      { key: 'promised_delivery_time', label: '承诺配送时间' , isDate: true},
       { key: 'order_type', label: '订单类型' },
       { key: 'luban_page_id', label: '鲁班页面ID' },
       { key: 'influencer_id', label: '达人ID' },
@@ -219,7 +232,7 @@ export class FinanceOrdersService extends BaseService {
       { key: 'store_id', label: '店铺ID' },
       { key: 'after_sales_status', label: '售后状态' },
       { key: 'cancellation_reason', label: '取消原因' },
-      { key: 'scheduled_delivery_time', label: '计划配送时间' },
+      { key: 'scheduled_delivery_time', label: '计划配送时间', isDate: true },
       { key: 'warehouse_id', label: '仓库ID' },
       { key: 'warehouse_name', label: '仓库名称' },
       { key: 'is_safe_purchase', label: '是否安心购' },
@@ -229,17 +242,17 @@ export class FinanceOrdersService extends BaseService {
       { key: 'traffic_channel', label: '流量渠道' },
       { key: 'delivery_entity', label: '配送主体' },
       { key: 'delivery_entity_details', label: '配送主体详情' },
-      { key: 'delivery_time', label: '配送时间' },
+      { key: 'delivery_time', label: '配送时间' , isDate: true},
       { key: 'price_reduction_discount', label: '降价优惠' },
       { key: 'platform_actual_discount', label: '平台实际优惠' },
       { key: 'merchant_actual_discount', label: '商家实际优惠' },
       { key: 'influencer_actual_discount', label: '达人实际优惠' },
-      { key: 'estimated_delivery_time', label: '预计配送时间' },
+      { key: 'estimated_delivery_time', label: '预计配送时间' , isDate: true},
       { key: 'is_platform_warehouse_auto_transfer', label: '是否平台仓库自动调拨' },
       { key: 'vehicle_type', label: '车辆类型' },
-      { key: 'scheduled_delivery_arrival_time', label: '计划配送到达时间' },
-      { key: 'suggested_delivery_start_time', label: '建议配送开始时间' },
-      { key: 'suggested_delivery_end_time', label: '建议配送结束时间' },
+      { key: 'scheduled_delivery_arrival_time', label: '计划配送到达时间' , isDate: true},
+      { key: 'suggested_delivery_start_time', label: '建议配送开始时间' , isDate: true},
+      { key: 'suggested_delivery_end_time', label: '建议配送结束时间' , isDate: true},
       { key: 'product69_code', label: '商品69码' },
       { key: 'shipping_sn_code', label: '发货SN码' },
       { key: 'shipping_imei_code1', label: '发货IMEI码1' },
@@ -253,7 +266,11 @@ export class FinanceOrdersService extends BaseService {
     const exportData = data.map(item => {
       const row: { [key: string]: any } = {};
       headers.forEach(header => {
-        row[header.key] = item[header.key] instanceof Date ? item[header.key].toISOString() : item[header.key] ?? '';
+        if (header.isDate) {
+          row[header.key] = formatDate(item[header.key]);
+        } else {
+          row[header.key] = item[header.key] ?? '';
+        }
       });
       return row;
     });

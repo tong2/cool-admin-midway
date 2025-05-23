@@ -38,7 +38,7 @@ export class FinanceCostEntity extends BaseEntity {
   cost_price: number;
 
 
-  @Column({ comment: '数据时间', nullable: true, type: 'timestamp' })
+  @Column({ comment: '数据时间', nullable: false, type: 'timestamp' })
   gen_data_time: Date;
 
 }

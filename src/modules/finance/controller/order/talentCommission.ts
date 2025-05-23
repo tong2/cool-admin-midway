@@ -51,7 +51,7 @@ export class FinanceTalentCommissionEntityController extends BaseController {
 
     // Create Excel workbook
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Talent Commissions');
+    const worksheet = workbook.addWorksheet('达人佣金表');
 
     // Add headers with Chinese labels
     worksheet.columns = headers.map(header => ({

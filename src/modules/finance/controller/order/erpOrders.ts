@@ -51,7 +51,7 @@ export class FinanceErpOrdersEntityController extends BaseController {
 
     // Create Excel workbook
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('ERP Orders');
+    const worksheet = workbook.addWorksheet('erp订单表');
 
     // Add headers with Chinese labels
     worksheet.columns = headers.map(header => ({

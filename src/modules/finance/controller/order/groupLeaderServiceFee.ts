@@ -51,7 +51,7 @@ export class FinanceGroupLeaderServiceFeeEntityController extends BaseController
 
     // Create Excel workbook
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Group Leader Service Fees');
+    const worksheet = workbook.addWorksheet('团长服务费表');
 
     // Add headers with Chinese labels
     worksheet.columns = headers.map(header => ({

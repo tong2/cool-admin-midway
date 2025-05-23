@@ -52,7 +52,7 @@ export class FinanceStockEntityController extends BaseController {
 
     // Create Excel workbook
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Stock Records');
+    const worksheet = workbook.addWorksheet('库存表');
 
     // Add headers with Chinese labels
     worksheet.columns = headers.map(header => ({

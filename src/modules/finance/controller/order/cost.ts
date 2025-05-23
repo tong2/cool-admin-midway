@@ -52,7 +52,7 @@ export class FinanceCostController extends BaseController {
 
     // Create Excel workbook
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Cost Records');
+    const worksheet = workbook.addWorksheet('成本表');
 
     // Add headers with Chinese labels
     worksheet.columns = headers.map(header => ({

@@ -1,8 +1,10 @@
 import { FinanceFinishEntity } from '../entity/finish';
+import { FinanceAccountingEntity } from '../entity/accounting';
+import { FinanceAccountingService } from '../service/accounting';
 import { FinanceOrdersEntity } from '../entity/orders';
 import { FinanceErpOrdersEntity } from '../entity/erpOrders';
 import { FinanceCostEntity } from '../entity/cost';
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/decorator';
 import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
 import { Repository, FindOptionsWhere, Like, Between, In, LessThanOrEqual } from 'typeorm';
@@ -35,6 +37,12 @@ export class FinanceFinishService extends BaseService {
 
   @InjectEntityModel(FinanceCostEntity)
   financeCostModel: Repository<FinanceCostEntity>;
+
+  @InjectEntityModel(FinanceAccountingEntity)
+  financeAccountingModel: Repository<FinanceAccountingEntity>;
+
+  @Inject()
+  financeAccountingService: FinanceAccountingService;
 
   /**
    * Conditional query with pagination, supporting fuzzy matching
@@ -97,12 +105,7 @@ export class FinanceFinishService extends BaseService {
     const endOfDay = new Date(startOfDay);
     endOfDay.setDate(endOfDay.getDate() + 1);
 
-    const finishCount = await this.financeFinishModel.count({
-      where: { gen_data_time: Between(startOfDay, endOfDay) },
-    });
-    if (finishCount > 0) {
-      return '此数据日期已经生成过';
-    }
+
 
     const ordersCount = await this.financeOrdersModel.count({
       where: { gen_data_time: Between(startOfDay, endOfDay) },
@@ -138,6 +141,39 @@ export class FinanceFinishService extends BaseService {
         return '成本表没有数据';
       }
       costDataTime = latestCost.gen_data_time;
+    }
+
+    try {
+      // Check count in financeFinishModel
+      const finishCount = await this.financeFinishModel.count({
+        where: { gen_data_time: Between(startOfDay, endOfDay) },
+      });
+
+      if (finishCount > 0) {
+        // Delete from financeFinishModel using raw SQL with ? placeholders
+        await this.financeFinishModel.query(
+          'DELETE FROM finance_finish WHERE gen_data_time BETWEEN ? AND ?',
+          [startOfDay, endOfDay],
+        );
+        console.log('FinanceFinish records deleted successfully.');
+      }
+
+      // Check count in financeAccountingModel
+      const accountingCount = await this.financeAccountingModel.count({
+        where: { gen_data_time: Between(startOfDay, endOfDay) },
+      });
+
+      if (accountingCount > 0) {
+        // Delete from financeAccountingModel using raw SQL with ? placeholders
+        await this.financeAccountingModel.query(
+          'DELETE FROM finance_accounting WHERE gen_data_time BETWEEN ? AND ?',
+          [startOfDay, endOfDay],
+        );
+        console.log('FinanceAccounting records deleted successfully.');
+      }
+    } catch (error) {
+      console.error('Error deleting records:', error);
+      throw error;
     }
 
     const orders = await this.financeOrdersModel.find({
@@ -311,6 +347,15 @@ export class FinanceFinishService extends BaseService {
       return '数据生成失败，请检查服务器日志';
     }
 
+    //生成核算表
+    try {
+      const result = await this.financeAccountingService.generateData(genDataTime);
+      return result;
+    } catch (error) {
+      console.error('Error calling FinanceAccountingService.generateData:', error);
+      return `生成核算表数据失败: ${error.message}`;
+    }
+    
     return '数据生成成功';
   }
 

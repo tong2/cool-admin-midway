@@ -98,7 +98,7 @@ export class FinanceFinishService extends BaseService {
  */
   async generateData(genDataTime: Date): Promise<string> {
     if (!genDataTime) {
-      return '传的数据日期为空';
+      throw new Error('传的数据日期为空');
     }
     const startOfDay = new Date(genDataTime);
     startOfDay.setHours(0, 0, 0, 0);
@@ -109,14 +109,14 @@ export class FinanceFinishService extends BaseService {
       where: { gen_data_time: Between(startOfDay, endOfDay) },
     });
     if (ordersCount === 0) {
-      return '订单表在该数据日期没有数据';
+      throw new Error('订单表在该数据日期没有数据');
     }
 
     const erpOrdersCount = await this.financeErpOrdersModel.count({
       where: { gen_data_time: Between(startOfDay, endOfDay) },
     });
     if (erpOrdersCount === 0) {
-      return 'ERP订单表在该数据日期没有数据';
+      throw new Error('ERP订单表在该数据日期没有数据');
     }
 
     const totalCostCount = await this.financeCostModel.count();

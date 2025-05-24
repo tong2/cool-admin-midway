@@ -399,7 +399,7 @@ export class FinanceOrdersService extends BaseService {
     // ---
     const missingDateEntity = entities.find(entity => entity.gen_data_time === null);
     if (missingDateEntity) {
-      return { success: false, message: '数据时间必填' };
+      throw new Error('数据时间必填');
     }
 
     // Batch save

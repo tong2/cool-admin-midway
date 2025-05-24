@@ -105,7 +105,7 @@ export class FinanceAccountingService extends BaseService {
 
       if (existingAccountingRecord) {
         console.log(`Data already exists for ${startDate.toISOString().split('T')[0]}`);
-        return `该数据日期的核算表已生成过`;
+        throw new Error('该数据日期的核算表已生成过');
       }
 
       // Query finance_finish data for the date
@@ -115,7 +115,7 @@ export class FinanceAccountingService extends BaseService {
 
       if (finishRecords.length === 0) {
         console.log(`No finance_finish data found for ${startDate.toISOString().split('T')[0]}`);
-        return `该数据日期的完成表未生成`;
+        throw new Error('该数据日期的完成表未生成');
       }
 
       // Get all non-empty sub_order_numbers

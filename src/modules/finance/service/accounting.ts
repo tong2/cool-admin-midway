@@ -162,7 +162,7 @@ export class FinanceAccountingService extends BaseService {
       const savedRecords = await this.financeAccountingModel.save(accountingRecords);
       console.log(`Successfully saved ${savedRecords.length} accounting records for ${startDate.toISOString().split('T')[0]}`);
 
-      return `Data generated successfully for ${startDate.toISOString().split('T')[0]}`;
+      return `数据生成成功`;
     } catch (error) {
       console.error('Error generating data:', error);
       throw new Error(`Failed to generate data: ${error.message}`);

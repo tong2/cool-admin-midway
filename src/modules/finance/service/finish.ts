@@ -346,7 +346,7 @@ export class FinanceFinishService extends BaseService {
       await this.financeFinishModel.save(finishEntities, { chunk: 1000 });
       console.log(`成功保存 ${finishEntities.length} 条记录`);
     } catch (error) {
-      console.error('保存数据失败:', error);
+      console.error('保存完成表数据失败:', error);
       return '数据生成失败，请检查服务器日志';
     }
 

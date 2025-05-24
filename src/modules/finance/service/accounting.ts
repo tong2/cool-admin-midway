@@ -1,4 +1,6 @@
 import { FinanceAccountingEntity } from '../entity/accounting';
+import { FinanceTalentCommissionEntity } from '../entity/talentCommission';
+import { FinanceGroupLeaderServiceFeeEntity } from '../entity/groupLeaderServiceFee';
 import { FinanceFinishEntity } from '../entity/finish';
 import { Provide } from '@midwayjs/decorator';
 import { BaseService } from '@cool-midway/core';
@@ -29,6 +31,13 @@ export class FinanceAccountingService extends BaseService {
   financeAccountingModel: Repository<FinanceAccountingEntity>;
   @InjectEntityModel(FinanceFinishEntity)
   financeFinishModel: Repository<FinanceFinishEntity>;
+
+  @InjectEntityModel(FinanceTalentCommissionEntity)
+  financeTalentCommissionModel: Repository<FinanceTalentCommissionEntity>;
+
+  @InjectEntityModel(FinanceGroupLeaderServiceFeeEntity)
+  financeGroupLeaderServiceFeeModel: Repository<FinanceGroupLeaderServiceFeeEntity>;
+
   /**
    * 分页条件查询，支持模糊匹配
    * @param query - 查询条件
@@ -160,7 +169,7 @@ export class FinanceAccountingService extends BaseService {
 
       // Save accounting records
       const savedRecords = await this.financeAccountingModel.save(accountingRecords);
-      console.log(`Successfully saved ${savedRecords.length} accounting records for ${startDate.toISOString().split('T')[0]}`);
+      console.log(`Successfully saved ${savedRecords.length} accounting records for ${startDate}`);
 
       return `数据生成成功`;
     } catch (error) {

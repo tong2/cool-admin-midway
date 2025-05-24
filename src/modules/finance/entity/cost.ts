@@ -13,7 +13,7 @@ export class FinanceCostEntity extends BaseEntity {
   @Column({ comment: '商家编码', nullable: true, length: 200 })
   merchant_code: string;
 
-  @Column({ comment: '货品编号', nullable: true, length: 50 })
+  @Column({ comment: '货品编号', nullable: true, length: 200 })
   product_number: string;
 
   @Column({ comment: '货品名称', nullable: true, length: 100 })

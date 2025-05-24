@@ -139,7 +139,7 @@ export class FinanceAccountingService extends BaseService {
           merchant_code: safe(record.merchant_code),
           warehouse: safe(record.warehouse_2),
           status: safe(record.status),
-          trade_date: record.transaction_time ?? startDate,
+          trade_date: record.transaction_time,
           order_quantity: safeNum(record.product_quantity),
           order_payable_amount: orderPayableAmount,
           actual_platform_subsidy: actualPlatformSubsidy,

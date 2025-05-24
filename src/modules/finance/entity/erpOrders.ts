@@ -12,7 +12,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
   @Column({ comment: '数据时间', nullable: false, type: 'timestamp' })
   gen_data_time: Date;
 
-  @Column({ comment: '订单编号', nullable: true, length: 50 })
+  @Column({ comment: '订单编号', nullable: true, length: 200 })
   order_number: string;
 
   @Column({ comment: '平台类型', nullable: true, length: 50 })
@@ -30,7 +30,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
   @Column({ comment: '仓库类型', nullable: true, length: 50 })
   warehouse_type: string;
 
-  @Column({ comment: '原始单号', nullable: true, length: 50 })
+  @Column({ comment: '原始单号', nullable: true, length: 200 })
   original_order_no: string;
 
   @Column({ comment: '订单状态', nullable: true, length: 50 })
@@ -60,10 +60,10 @@ export class FinanceErpOrdersEntity extends BaseEntity {
   @Column({ comment: '分销商名称', nullable: true, length: 100 })
   distributor_name: string;
 
-  @Column({ comment: '分销商编号', nullable: true, length: 50 })
+  @Column({ comment: '分销商编号', nullable: true, length: 200 })
   distributor_code: string;
 
-  @Column({ comment: '分销原始单号', nullable: true, length: 50 })
+  @Column({ comment: '分销原始单号', nullable: true, length: 200 })
   distribution_original_order_no: string;
 
   @Column({ comment: '下单时间', nullable: true, type: 'timestamp' })
@@ -81,7 +81,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
   @Column({ comment: '客户网名', nullable: true, length: 100 })
   customer_nickname: string;
 
-  @Column({ comment: '收件人', nullable: true, length: 100 })
+  @Column({ comment: '收件人', nullable: true, length: 300 })
   recipient_name: string;
 
   @Column({ comment: '省市县', nullable: true, length: 100 })
@@ -297,7 +297,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
   @Column({ comment: '处理天数', nullable: true, type: 'int' })
   processing_days: number;
 
-  @Column({ comment: '货品商家编码', nullable: true, length: 50 })
+  @Column({ comment: '货品商家编码', nullable: true, length: 200 })
   product_merchant_code: string;
 
   @Column({ comment: '原始货品数量', nullable: true, type: 'int' })
@@ -318,7 +318,7 @@ export class FinanceErpOrdersEntity extends BaseEntity {
   @Column({ comment: '激活时间', nullable: true, type: 'timestamp' })
   activation_time: Date;
 
-  @Column({ comment: '已开具发票', nullable: true, length: 50, default: 'false' })
+  @Column({ comment: '已开具发票', nullable: true, length: 50 })
   invoice_issued: string;
 
   @Column({

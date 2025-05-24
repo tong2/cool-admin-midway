@@ -13,7 +13,7 @@ export class FinanceStockEntity extends BaseEntity {
   @Column({ comment: '数据时间', nullable: false, type: 'timestamp' })
   gen_data_time: Date;
 
-  @Column({ comment: '商品编码', nullable: true, length: 50 })
+  @Column({ comment: '商品编码', nullable: true, length: 200 })
   product_code: string;
 
   @Column({

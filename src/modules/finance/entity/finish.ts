@@ -13,10 +13,10 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '数据时间', nullable: false, type: 'timestamp' })
   gen_data_time: Date;
 
-  @Column({ comment: '主订单编号', nullable: true, length: 50 })
+  @Column({ comment: '主订单编号', nullable: true, length: 200 })
   main_order_number: string;
 
-  @Column({ comment: '子订单编号', nullable: true, length: 50 })
+  @Column({ comment: '子订单编号', nullable: true, length: 200 })
   sub_order_number: string;
 
   @Column({ comment: '选购商品', nullable: true, length: 100 })
@@ -28,10 +28,10 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '商品数量', nullable: true, type: 'integer' })
   product_quantity: number;
 
-  @Column({ comment: '商品ID', nullable: true, length: 50 })
+  @Column({ comment: '商品ID', nullable: true, length: 200 })
   product_id: string;
 
-  @Column({ comment: '商家编码', nullable: true, length: 50 })
+  @Column({ comment: '商家编码', nullable: true, length: 200 })
   merchant_code: string;
 
   @Column({ comment: '商品单价', nullable: true, type: 'decimal', precision: 10, scale: 4 })
@@ -70,7 +70,7 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '手续费', nullable: true, type: 'decimal', precision: 10, scale: 4 })
   transaction_fee: number;
 
-  @Column({ comment: '收件人', nullable: true, length: 50 })
+  @Column({ comment: '收件人', nullable: true, length: 300 })
   recipient_name: string;
 
   @Column({ comment: '收件人手机号', nullable: true, length: 20 })
@@ -88,7 +88,7 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '街道', nullable: true, length: 100 })
   street: string;
 
-  @Column({ comment: '详细地址', nullable: true, length: 200 })
+  @Column({ comment: '详细地址', nullable: true, length: 500 })
   detailed_address: string;
 
   @Column({ comment: '订单提交时间', nullable: true, type: 'datetime' })
@@ -118,16 +118,16 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '订单类型', nullable: true, length: 50 })
   order_type: string;
 
-  @Column({ comment: '鲁班落地页ID', nullable: true, length: 50 })
+  @Column({ comment: '鲁班落地页ID', nullable: true, length: 200 })
   luban_landing_page_id: string;
 
-  @Column({ comment: '达人ID', nullable: true, length: 50 })
+  @Column({ comment: '达人ID', nullable: true, length: 200 })
   talent_id: string;
 
   @Column({ comment: '达人昵称', nullable: true, length: 50 })
   talent_nickname: string;
 
-  @Column({ comment: '所属门店ID', nullable: true, length: 50 })
+  @Column({ comment: '所属门店ID', nullable: true, length: 200 })
   store_id: string;
 
   @Column({ comment: '售后状态', nullable: true, length: 50 })
@@ -139,7 +139,7 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '预约发货时间', nullable: true, type: 'datetime' })
   scheduled_shipping_time: Date;
 
-  @Column({ comment: '仓库ID', nullable: true, length: 50 })
+  @Column({ comment: '仓库ID', nullable: true, length: 200 })
   warehouse_id: string;
 
   @Column({ comment: '仓库名称', nullable: true, length: 100 })

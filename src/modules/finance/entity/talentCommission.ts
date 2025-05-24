@@ -13,10 +13,10 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
   @Column({ comment: '数据时间', nullable: false, type: 'timestamp' })
   gen_data_time: Date;
 
-  @Column({ comment: '订单id', nullable: true, length: 50 })
+  @Column({ comment: '订单id', nullable: true, length: 200 })
   order_id: string;
 
-  @Column({ comment: '商品id', nullable: true, length: 50 })
+  @Column({ comment: '商品id', nullable: true, length: 200 })
   product_id: string;
 
   @Column({ comment: '商品名称', nullable: true, length: 100 })
@@ -109,7 +109,7 @@ export class FinanceTalentCommissionEntity extends BaseEntity {
   })
   deposit_amount: number;
 
-  @Column({ comment: '店铺id', nullable: true, length: 50 })
+  @Column({ comment: '店铺id', nullable: true, length: 200 })
   shop_id: string;
 
   @Column({ comment: '店铺名称', nullable: true, length: 100 })

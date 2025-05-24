@@ -10,7 +10,7 @@ export class FinanceCostEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ comment: '主键ID' })
   id: number;
 
-  @Column({ comment: '商家编码', nullable: true, length: 50 })
+  @Column({ comment: '商家编码', nullable: true, length: 200 })
   merchant_code: string;
 
   @Column({ comment: '货品编号', nullable: true, length: 50 })

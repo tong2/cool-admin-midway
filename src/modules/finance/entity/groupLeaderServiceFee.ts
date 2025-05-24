@@ -13,13 +13,13 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
   @Column({ comment: '数据时间', nullable: false, type: 'timestamp' })
   gen_data_time: Date;
 
-  @Column({ comment: '订单id', nullable: true, length: 50 })
+  @Column({ comment: '订单id', nullable: true, length: 200 })
   order_id: string;
 
   @Column({ comment: '商品名称', nullable: true, length: 100 })
   product_name: string;
 
-  @Column({ comment: '商品id', nullable: true, length: 50 })
+  @Column({ comment: '商品id', nullable: true, length: 200 })
   product_id: string;
 
   @Column({ comment: '订单状态', nullable: true, length: 50 })
@@ -112,7 +112,7 @@ export class FinanceGroupLeaderServiceFeeEntity extends BaseEntity {
   @Column({ comment: '商品数量', nullable: true, type: 'int' })
   product_quantity: number;
 
-  @Column({ comment: '团长活动id', nullable: true, length: 50 })
+  @Column({ comment: '团长活动id', nullable: true, length: 200 })
   group_leader_activity_id: string;
 
   @Column({ comment: '订单来源:直播', nullable: true, length: 50 })

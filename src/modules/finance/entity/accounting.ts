@@ -12,7 +12,7 @@ export class FinanceAccountingEntity extends BaseEntity {
   @Column({ comment: '数据时间', nullable: false, type: 'timestamp' })
   gen_data_time: Date;
 
-  @Column({ comment: '子订单编号', nullable: true })
+  @Column({ comment: '子订单编号', nullable: true , length: 200 })
   sub_order_no: string;
 
   @Column({ comment: '状态', nullable: true })
@@ -27,7 +27,7 @@ export class FinanceAccountingEntity extends BaseEntity {
   @Column({ comment: '商品ID', nullable: true })
   product_id: string;
 
-  @Column({ comment: '商家编码', nullable: true })
+  @Column({ comment: '商家编码', nullable: true , length: 200 })
   merchant_code: string;
 
   @Column({ comment: '订单数量', type: 'int', nullable: true })

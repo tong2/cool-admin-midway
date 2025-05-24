@@ -332,8 +332,8 @@ export class FinanceFinishService extends BaseService {
           ).toFixed(2)
         );
 
-        entity.erp_cost = entity.total_cost;
-        entity.erp_express_fee = avgShippingFee;
+        entity.erp_cost = safeNum(entity.total_cost);
+        entity.erp_express_fee = safeNum(avgShippingFee);
 
         finishEntities.push(entity);
       }

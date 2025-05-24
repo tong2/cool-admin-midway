@@ -92,10 +92,10 @@ export class FinanceFinishService extends BaseService {
   }
 
   /**
-   * 生成完成表
-   * @param genDataTime 
-   * @returns 
-   */
+ * 生成完成表
+ * @param genDataTime 
+ * @returns 
+ */
   async generateData(genDataTime: Date): Promise<string> {
     if (!genDataTime) {
       return '传的数据日期为空';
@@ -104,8 +104,6 @@ export class FinanceFinishService extends BaseService {
     startOfDay.setHours(0, 0, 0, 0);
     const endOfDay = new Date(startOfDay);
     endOfDay.setDate(endOfDay.getDate() + 1);
-
-
 
     const ordersCount = await this.financeOrdersModel.count({
       where: { gen_data_time: Between(startOfDay, endOfDay) },
@@ -189,8 +187,11 @@ export class FinanceFinishService extends BaseService {
     const shippingFeeByMainOrder = erpOrders.reduce((acc, erpOrder) => {
       const mainOrder = orders.find(o => o.sub_order_number === erpOrder.original_order_no)?.main_order_number;
       if (mainOrder) {
-        console.log('erpOrder.shipping_estimated_cost:' + erpOrder.shipping_estimated_cost);
-        acc[mainOrder] = (acc[mainOrder] || 0) + (erpOrder.shipping_estimated_cost || 0);
+        const shippingCost = Number.isNaN(Number(erpOrder.shipping_estimated_cost))
+          ? 0
+          : Number(erpOrder.shipping_estimated_cost || 0);
+        console.log('erpOrder.shipping_estimated_cost:' + shippingCost);
+        acc[mainOrder] = (acc[mainOrder] || 0) + shippingCost;
       }
       return acc;
     }, {} as Record<string, number>);
@@ -208,7 +209,9 @@ export class FinanceFinishService extends BaseService {
       const subOrders = mainOrderGroups[mainOrder];
       const numSubOrders = subOrders.length;
       const totalShippingFee = shippingFeeByMainOrder[mainOrder] || 0;
-      const avgShippingFee = Number((totalShippingFee / (numSubOrders || 1)).toFixed(2));
+      const avgShippingFee = Number.isNaN(totalShippingFee / (numSubOrders || 1))
+        ? 0
+        : Number((totalShippingFee / (numSubOrders || 1)).toFixed(2));
 
       for (const order of subOrders) {
         const entity = new FinanceFinishEntity();
@@ -290,7 +293,7 @@ export class FinanceFinishService extends BaseService {
           transaction_time: order.payment_completion_time,
           gen_data_time: genDataTime,
           province_2: safe(order.province),
-          warehouse_2: safe(matchingErpOrder?.warehouse_name), // Assign warehouse_name from erpOrders
+          warehouse_2: safe(matchingErpOrder?.warehouse_name),
           express_fee: avgShippingFee,
           operation_fee: 0,
           status: safe(order.order_status),
@@ -347,7 +350,7 @@ export class FinanceFinishService extends BaseService {
       return '数据生成失败，请检查服务器日志';
     }
 
-    //生成核算表
+    // 生成核算表
     try {
       const result = await this.financeAccountingService.generateData(genDataTime);
       return result;
@@ -355,7 +358,7 @@ export class FinanceFinishService extends BaseService {
       console.error('Error calling FinanceAccountingService.generateData:', error);
       return `生成核算表数据失败: ${error.message}`;
     }
-    
+
     return '数据生成成功';
   }
 

@@ -73,7 +73,7 @@ export class FinanceFinishEntity extends BaseEntity {
   @Column({ comment: '收件人', nullable: true, length: 300 })
   recipient_name: string;
 
-  @Column({ comment: '收件人手机号', nullable: true, length: 20 })
+  @Column({ comment: '收件人手机号', nullable: true, length: 300 })
   recipient_phone: string;
 
   @Column({ comment: '省', nullable: true, length: 50 })

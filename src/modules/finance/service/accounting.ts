@@ -5,7 +5,7 @@ import { FinanceFinishEntity } from '../entity/finish';
 import { Provide } from '@midwayjs/decorator';
 import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
-import { Repository, FindOptionsWhere, Like } from 'typeorm';
+import { Repository, FindOptionsWhere, Like, In } from 'typeorm';
 
 const safe = (v: any, fallback: any = '') => v ?? fallback;
 const safeNum = (v: any, fallback = 0) => isNaN(Number(v)) ? fallback : Number(v);
@@ -83,10 +83,10 @@ export class FinanceAccountingService extends BaseService {
   }
 
   /**
-  * 生成核算表
-  * @param genDataTime - Data generation timestamp
-  * @returns Success or error message
-  */
+   * 生成核算表
+   * @param genDataTime - Data generation timestamp
+   * @returns Success or error message
+   */
   async generateData(genDataTime: Date): Promise<string> {
     try {
       // Validate input date
@@ -118,6 +118,37 @@ export class FinanceAccountingService extends BaseService {
         return `该数据日期的完成表未生成`;
       }
 
+      // Get all non-empty sub_order_numbers
+      const subOrderNumbers = finishRecords
+        .map(record => record.sub_order_number)
+        .filter(subOrderNumber => subOrderNumber); // Filter out null/undefined/empty
+
+      // Fetch all relevant talent commissions and group leader fees in single queries
+      const talentCommissions = subOrderNumbers.length > 0
+        ? await this.financeTalentCommissionModel.find({
+          where: { order_id: In(subOrderNumbers) },
+        })
+        : [];
+      const groupLeaderFees = subOrderNumbers.length > 0
+        ? await this.financeGroupLeaderServiceFeeModel.find({
+          where: { order_id: In(subOrderNumbers) },
+        })
+        : [];
+
+      // Create maps for quick lookup, keeping only the first record for each order_id
+      const talentCommissionMap = new Map();
+      for (const tc of talentCommissions) {
+        if (!talentCommissionMap.has(tc.order_id)) {
+          talentCommissionMap.set(tc.order_id, tc.estimated_commission);
+        }
+      }
+      const groupLeaderFeeMap = new Map();
+      for (const glf of groupLeaderFees) {
+        if (!groupLeaderFeeMap.has(glf.order_id)) {
+          groupLeaderFeeMap.set(glf.order_id, glf.estimated_service_fee_income);
+        }
+      }
+
       // Helper to apply negative sign if non-zero
       const negateIfNonZero = (value: number): number => (value !== 0 ? -value : 0);
 
@@ -128,9 +159,15 @@ export class FinanceAccountingService extends BaseService {
         const actualPlatformSubsidy = safeNum(record.platform_actual_discount);
         const influencerDiscountAmount = safeNum(record.talent_actual_discount);
         const platformServiceFee = safeNum(record.platform_service_fee);
-        // Placeholder: Set to 0 until correct mappings are provided
-        const influencerCommission = 0;
-        const groupLeaderServiceFee = 0;
+
+        // Get commissions and fees from maps if sub_order_number exists
+        const influencerCommission = record.sub_order_number
+          ? safeNum(talentCommissionMap.get(record.sub_order_number) ?? 0)
+          : 0;
+        const groupLeaderServiceFee = record.sub_order_number
+          ? safeNum(groupLeaderFeeMap.get(record.sub_order_number) ?? 0)
+          : 0;
+
         const cost = safeNum(record.total_cost);
         const shippingFee = safeNum(record.shipping_fee);
         const operationFee = safeNum(record.operation_fee);

@@ -1,4 +1,4 @@
-import { FinanceCostEntity } from '../entity/cost';
+import { FinancePostageEntity } from '../entity/postage';
 import { Provide } from '@midwayjs/decorator';
 import { BaseService } from '@cool-midway/core';
 import { InjectEntityModel } from '@midwayjs/typeorm';
@@ -16,14 +16,13 @@ const formatDate = (date: Date | null | undefined): string => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-
 /**
- * 成本表服务
+ * 邮资表服务
  */
 @Provide()
-export class FinanceCostService extends BaseService {
-  @InjectEntityModel(FinanceCostEntity)
-  financeCostModel: Repository<FinanceCostEntity>;
+export class FinancePostageService extends BaseService {
+  @InjectEntityModel(FinancePostageEntity)
+  financePostageModel: Repository<FinancePostageEntity>;
 
   /**
    * Conditional query with pagination, supporting fuzzy matching
@@ -33,37 +32,29 @@ export class FinanceCostService extends BaseService {
     const {
       page = 1,
       size = 10,
-      merchant_code,
-      product_number,
-      product_name,
+      province,
       keyWord,
       ...otherParams
     } = query;
 
-    const where: FindOptionsWhere<FinanceCostEntity> = {};
+    const where: FindOptionsWhere<FinancePostageEntity> = {};
 
     // Fuzzy matching for string fields
-    if (merchant_code) {
-      where.merchant_code = Like(`%${merchant_code}%`);
-    }
-    if (product_number) {
-      where.product_number = Like(`%${product_number}%`);
-    }
-    if (product_name) {
-      where.product_name = Like(`%${product_name}%`);
+    if (province) {
+      where.province = Like(`%${province}%`);
     }
     if (keyWord) {
-      where.merchant_code = Like(`%${keyWord}%`);
+      where.province = Like(`%${keyWord}%`);
     }
 
     // Other dynamic conditions (exact match)
     Object.keys(otherParams).forEach(key => {
-      if (otherParams[key] && FinanceCostEntity.prototype.hasOwnProperty(key)) {
+      if (otherParams[key] && FinancePostageEntity.prototype.hasOwnProperty(key)) {
         where[key] = otherParams[key];
       }
     });
 
-    const [list, total] = await this.financeCostModel.findAndCount({
+    const [list, total] = await this.financePostageModel.findAndCount({
       where,
       skip: (page - 1) * size,
       take: size,
@@ -77,46 +68,38 @@ export class FinanceCostService extends BaseService {
    * @param query - Query conditions
    */
   async export(query: any) {
-    const where: FindOptionsWhere<FinanceCostEntity> = {};
+    const where: FindOptionsWhere<FinancePostageEntity> = {};
 
     // Apply same conditions as list method
     const {
-      merchant_code,
-      product_number,
-      product_name,
+      province,
       ...otherParams
     } = query;
 
-    if (merchant_code) {
-      where.merchant_code = Like(`%${merchant_code}%`);
-    }
-    if (product_number) {
-      where.product_number = Like(`%${product_number}%`);
-    }
-    if (product_name) {
-      where.product_name = Like(`%${product_name}%`);
+    if (province) {
+      where.province = Like(`%${province}%`);
     }
 
     Object.keys(otherParams).forEach(key => {
-      if (otherParams[key] && FinanceCostEntity.prototype.hasOwnProperty(key)) {
+      if (otherParams[key] && FinancePostageEntity.prototype.hasOwnProperty(key)) {
         where[key] = otherParams[key];
       }
     });
 
-    const data = await this.financeCostModel.find({ where });
+    const data = await this.financePostageModel.find({ where });
 
     // Define export headers with Chinese labels
     const headers = [
-      { key: 'gen_data_time', label: '数据时间' , isDate: true },
-      { key: 'merchant_code', label: '商家编码' },
-      { key: 'product_number', label: '货品编号' },
-      { key: 'product_name', label: '货品名称' },
-      { key: 'product_short_name', label: '货品简称' },
-      { key: 'category', label: '分类' },
-      { key: 'specification_name', label: '规格名称' },
-      { key: 'unit_weight', label: '单品重量' },
-      { key: 'brand', label: '品牌' },
-      { key: 'cost_price', label: '成本价' },
+      { key: 'gen_data_time', label: '数据时间', isDate: true },
+      { key: 'province', label: '省份' },
+      { key: 'weight_0_0_5kg_with_pack', label: '0-0.5KG (含打包辅材)' },
+      { key: 'weight_0_51_1kg_machine_with_pack', label: '0.51-1KG (机打含打包辅材)' },
+      { key: 'weight_1_01_2kg_label', label: '1.01-2KG (贴单件)' },
+      { key: 'weight_1_01_2kg_pack', label: '1.01-2KG (打包品)' },
+      { key: 'weight_2_01_3kg_label', label: '2.01-3KG (贴单件)' },
+      { key: 'weight_2_01_3kg_pack', label: '2.01-3KG (打包品)' },
+      { key: 'ten_kg_with_fee_first_3kg', label: '10公斤内首重3公斤 (含辅材和操作费)' },
+      { key: 'ten_kg_no_fee_additional_per_kg', label: '10公斤内续重每公斤 (3kg以上不含辅材和操作费)' },
     ];
 
     // Format data for export
@@ -136,7 +119,7 @@ export class FinanceCostService extends BaseService {
   }
 
   /**
-   * Import cost records from Excel data
+   * Import postal rate records from Excel data
    * @param data - Parsed Excel data
    */
   async import(data: any[]) {
@@ -169,36 +152,34 @@ export class FinanceCostService extends BaseService {
     };
 
     const entities = data.map(item => {
-      const entity = new FinanceCostEntity();
+      const entity = new FinancePostageEntity();
 
-      // String fields
-      entity.merchant_code = safeTrim(item['商家编码']) ?? null;
-      entity.product_number = safeTrim(item['货品编号']) ?? null;
-      entity.product_name = safeTrim(item['货品名称']) ?? null;
-      entity.product_short_name = safeTrim(item['货品简称']) ?? null;
-      entity.category = safeTrim(item['分类']) ?? null;
-      entity.specification_name = safeTrim(item['规格名称']) ?? null;
-      entity.brand = safeTrim(item['品牌']) ?? null;
+      // String field
+      entity.province = safeTrim(item['省份']) ?? null;
 
       // Numeric fields
-      entity.unit_weight = parseFloat(item['单品重量']) || null;
-      entity.cost_price = parseFloat(item['成本价']) || null;
+      entity.weight_0_0_5kg_with_pack = parseFloat(item['0-0.5KG (含打包辅材)']) || null;
+      entity.weight_0_51_1kg_machine_with_pack = parseFloat(item['0.51-1KG (机打含打包辅材)']) || null;
+      entity.weight_1_01_2kg_label = parseFloat(item['1.01-2KG (贴单件)']) || null;
+      entity.weight_1_01_2kg_pack = parseFloat(item['1.01-2KG (打包品)']) || null;
+      entity.weight_2_01_3kg_label = parseFloat(item['2.01-3KG (贴单件)']) || null;
+      entity.weight_2_01_3kg_pack = parseFloat(item['2.01-3KG (打包品)']) || null;
+      entity.ten_kg_with_fee_first_3kg = parseFloat(item['10公斤内首重3公斤 (含辅材和操作费)']) || null;
+      entity.ten_kg_no_fee_additional_per_kg = parseFloat(item['10公斤内续重每公斤 (3kg以上不含辅材和操作费)']) || null;
 
       entity.gen_data_time = safeDate(item['数据时间']);
 
       return entity;
     });
 
-    // ---
     // Check for missing '数据时间' before saving
-    // ---
     const missingDateEntity = entities.find(entity => entity.gen_data_time === null);
     if (missingDateEntity) {
       throw new Error('数据时间必填');
     }
 
     // Batch save
-    await this.financeCostModel.save(entities);
+    await this.financePostageModel.save(entities);
     return { success: true, count: entities.length };
   }
 }

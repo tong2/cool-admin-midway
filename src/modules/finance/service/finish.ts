@@ -121,7 +121,7 @@ export class FinanceFinishService extends BaseService {
 
     const totalCostCount = await this.financeCostModel.count();
     if (totalCostCount === 0) {
-      return '成本表没有数据';
+      throw new Error('成本表没有数据');
     }
 
     let costDataTime: Date;
@@ -136,7 +136,7 @@ export class FinanceFinishService extends BaseService {
         order: { gen_data_time: 'DESC' },
       });
       if (!latestCost) {
-        return '成本表没有数据';
+        throw new Error('成本表没有数据');
       }
       costDataTime = latestCost.gen_data_time;
     }
